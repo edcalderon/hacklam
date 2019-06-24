@@ -2638,8 +2638,8 @@ fieldset:disabled a.btn {
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4;
+  background-color: #ffe701;
+  border-color: #ffe701;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -10703,7 +10703,7 @@ a:focus {
 .bg-gradient-primary {
   background-color: #4e73df;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #4e73df), to(#224abe));
-  background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+  background-image: linear-gradient(180deg, #ffe701 10%, #ffe701 100%);
   background-size: cover;
 }
 
@@ -11433,7 +11433,10 @@ a:focus {
 }
 
 .sidebar-dark .nav-item .nav-link i {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 0,0, 0.8);
+}
+.sidebar-dark .nav-item .nav-link span {
+  color: rgba(255, 0,0, 0.8);
 }
 
 .sidebar-dark .nav-item .nav-link:active, .sidebar-dark .nav-item .nav-link:focus, .sidebar-dark .nav-item .nav-link:hover {
@@ -11449,7 +11452,7 @@ a:focus {
 }
 
 .sidebar-dark .nav-item.active .nav-link {
-  color: #fff;
+  color: #ef0e0e;
 }
 
 .sidebar-dark .nav-item.active .nav-link i {
@@ -11612,16 +11615,19 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("https://30blinddates.files.wordpress.com/2014/06/shutterstock_174215792.jpg?w=553&h=508");
+  background: url("/img/elesito3.png");
   background-position: center;
-  background-size: cover;
+  background-repeat: no-repeat;
+  background-size: 400px 400px;
 }
 
 .bg-register-image {
   /*background: url("https://source.unsplash.com/Mv9hjnEUHR4/600x800");*/
-  background: url("https://www.telemundo.com/sites/nbcutelemundo/files/images/gallery/2016/08/16/estudiantes-de-la-universidad-felices_0.jpg");
+  background: url("/img/elesito5.png");
   background-position: center;
   background-size: cover;
+  background-repeat: no-repeat;
+  background-size: 400px 400px;s
 }
 
 .bg-password-image {
