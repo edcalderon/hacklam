@@ -183,7 +183,23 @@ app.post('/register', (req, res) =>{
 });
 
 app.get('/dashboardadmin', (req, res) =>{
-	res.render ('dashboardadmin',{})
+	User.find({}, (err,result)=>{
+		if(err){
+			console.log(err)
+		}
+		res.render ('dashboardadmin',{
+              usuarios: result
+		})
+	});
+});	
+app.get('/dashboardadmintable', (req, res) =>{
+	User.find({}, (err,result)=>{
+		console.log(result)
+		if(err){
+			console.log(err)
+		}
+		res.json(result)
+	});	
 });
 
 app.post('/dashboardadmin', (req, res) =>{

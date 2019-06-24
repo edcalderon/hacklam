@@ -12,6 +12,30 @@ listaActualizaUsuarios = [];
 
 //Listar cursos disponibles mongo (interesados)
 
+
+hbs.registerHelper('listarUsuarios', (usuarios) => {
+	    texto = ""
+		usuarios.forEach ( usr=> {
+        texto =  texto + `<tr role="row" class="odd">
+			 <td class="sorting_1">${usr.firstname}</td>
+			 <td>${usr.lastname}</td>
+			 <td>${usr.cc}</td>
+			 <td class="cell100 column4">   
+			   <div class="inblock" >
+				 <i id="edit" data-id="${usr.cc}" class="fa fa-pencil" ></i>
+				 <i id="delete" data-id="${usr.cc}" class="fa fa-trash"></i>
+				 <input type="checkbox" data-id="${usr.cc}" class="check"/> 
+			   </div>
+			 </td>
+            </tr>`;
+
+		});
+		return texto;
+		
+});
+
+
+
 hbs.registerHelper('disponibleCourses', (listado) => {
 	let texto = " ";
 	let count = 1;
