@@ -15,8 +15,17 @@
         <!-- End of Topbar -->
         <!-- Begin Page Content -->
         <div class="container-fluid">
+
           {{#if coordinador}}
-          <!-- Page Heading -->
+            <form action="/dashboardadmin" method="post" >	
+              <div class="form-row">
+                  <div class="col form-group">
+                  <label>Buscar por cedula</label>
+                    <input type="text"  class="form-control" name="busqueda">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block"> buscar </button>
+            </form>
 
         <!-- /.container-fluid -->
         {{else}}

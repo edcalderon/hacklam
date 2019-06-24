@@ -44,11 +44,6 @@ const userSchema = new Schema({
     required: true,
     trim: true
   },
-  cursos: {
-    type: Array,
-    required: true,
-    trim: true
-  },
   avatar: {
     type: Buffer
   }

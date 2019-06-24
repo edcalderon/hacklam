@@ -1,32 +1,25 @@
-<form action="/dashboardupdateuser" method="post" >
-  {{#if resultshow}}
-  <div class="alert alert-info alert-dismissable">
-    <a class="panel-close close" data-dismiss="alert">×</a>
-    <i class="fa fa-coffee"></i>
-     <strong>{{resultshow}}</strong>.
-  </div>
-  {{/if}}
+<form action="/dashboardupdateuser" method="post">
 	<div class="form-row">
 		<div class="col form-group">
 			<label>Nombre </label>
-		  	<input type="text"  class="form-control" name="firstname" value={{firstnameUser}}>
+		  	<input type="text"  class="form-control" name="firstnameUser" value={{firstnameUser}}>
 		</div>
 		<div class="col form-group">
 			<label>Apellidos</label>
-		  	<input type="text" class="form-control" name="lastname" value={{lastnameUser}}>
+		  	<input type="text" class="form-control" name="lastnameUser" value={{lastnameUser}}>
 		</div>
 	</div>
 	<div class="form-row">
 		<div class="form-group col-md-6">
 		  <label>Telefono</label>
-		  <input type="text" class="form-control" name="phone" value={{phoneUser}}>
+		  <input type="text" class="form-control" name="phoneUser" value={{phoneUser}}>
 		</div>
 		<div class="form-group col-md-6">
 		  <label>Roll</label>
-		  <select id="inputState" class="form-control" name="roll" value={{rollUser}}>
-		    <option> profesor</option>
-		      <option>coordinador</option>
-		      <option>aspirante</option>
+		  <select id="inputState" class="form-control" name="rollUser" value={{rollUser}}>
+		    <option> administrador</option>
+		      <option>supervisor</option>
+		      <option>cajero</option>
 		      <option selected="">{{rollUser}}</option>
 		  </select>
 		</div>
@@ -34,11 +27,11 @@
   <div class="form-row">
 		<div class="form-group col-md-6">
 		  <label>Cedula*</label>
-		  <input type="text" class="form-control" name="cc" value={{ccUser}}>
+		  <input type="text" class="form-control" name="ccUser" value={{ccUser}}>
 		</div>
     <div class="form-group col-md-6">
 		  <label>Correo*</label>
-		  <input type="text" class="form-control" name="email" value={{emailUser}}>
+		  <input type="text" class="form-control" name="emailUser" value={{emailUser}}>
 		</div>
     <small class="text-muted"> * Cedula y Correo son identificadores únicos y sólo podran ser modificados por el administrador del sistema. </small>
 	</div>

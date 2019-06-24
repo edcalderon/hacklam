@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const courseSchema = new Schema({
+const productSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -14,29 +14,22 @@ const courseSchema = new Schema({
     required: true,
     lowercase: true
   },
-  value: {
+  cantidad: {
     type: Number,
     required: true
   },
-  intensity: {
+  precio: {
     type: Number,
     required: true
   },
-  modality: {
+  ubicacion: {
     type: String,
     required: true,
     trim: true
-  },
-  state: {
-    type: String,
-    required: true
-  },
-  students: {
-    type: Array
   }
 });
 
 // create mongoose model
-const Course = mongoose.model('Course', courseSchema);
+const Product = mongoose.model('Product', productSchema);
 
-module.exports = Course;
+module.exports = Product;

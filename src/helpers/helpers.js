@@ -1,16 +1,12 @@
 const hbs = require('hbs');
 const fs = require('fs');
-const data = require('./../data.js');
 const app = require('./../app.js');
 var jsdom = require('jsdom');
 $ = require('jquery')(new jsdom.JSDOM().window);
-const listaCursos = data.listadecursos;
 const User = require('./../models/user');
-const Course = require('./../models/course');
+const Course = require('./../models/product');
 const session = require('express-session');
 
-const listaUsuarios = data.listadeusuarios;
-listaPersonas = data.listadeusuarios;
 listaInscritos = [];
 listaActualizaUsuarios = [];
 
