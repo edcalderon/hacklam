@@ -73,7 +73,7 @@ app.post('/loginregister', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
-			req.session.coordinador = true;
+			req.session.administrador = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}

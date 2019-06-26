@@ -72,8 +72,8 @@ app.use((req, res, next) => {
 		if (req.session.avatar) {
 			res.locals.avatar = req.session.avatar;
 		}
-		if (req.session.coordinador) {
-			res.locals.coordinador = true;
+		if (req.session.administrador) {
+			res.locals.administrador = true;
 		}
 	}
 	next();
