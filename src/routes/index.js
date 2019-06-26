@@ -57,16 +57,18 @@ app.post('/login', (req, res) => {
 				path: '/login',
 				button: 'danger',
 			});
-		} else if (result && !bcrypt.compareSync(req.body.inputPassword, result.password)) {
+		} else if (!bcrypt.compareSync(req.body.inputPassword, result.password)) {
 			res.render('login', {
 				login: req.body.login,
 				show: 'Usuario o contraseña incorrectas',
 				path: '/login',
 				button: 'danger',
 			});
-		} else if (result && bcrypt.compareSync(req.body.inputPassword, result.password) && result.roll === 'administrador') {
+		} else if (result.roll === 'administrador') {
 			// session variables
-			req.session.user = result._id;
+			req.session.id = result._id;
+			req.session.user = result.user;
+			req.session.sede = result.sede;
 			req.session.roll = result.roll;
 			req.session.firstname = result.firstname;
 			req.session.lastname = result.lastname;
@@ -79,31 +81,36 @@ app.post('/login', (req, res) => {
 			}
 			res.render('login', {
 				login: req.body.login,
-				show: 'Bienvenido.',
+				show: 'Bienvenido Administrador',
 				path: '/dashboardadmin',
 				button: 'success',
 			});
-		} else if (result && bcrypt.compareSync(req.body.inputPassword, result.password) && result.roll === 'cajero') {
+		} else if (result.roll === 'gerente') {
 			// session variables
-			req.session.user = result._id;
+			req.session.id = result._id;
+			req.session.user = result.user;
+			req.session.sede = result.sede;
 			req.session.roll = result.roll;
 			req.session.firstname = result.firstname;
 			req.session.lastname = result.lastname;
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.gerente = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
 			res.render('login', {
 				login: req.body.login,
-				show: 'Usuario y Contraseña correctas! ya puedes continuar.',
-				path: '/dashboarduser',
+				show: 'Bienvenido Gerente',
+				path: '/dashboardgerente',
 				button: 'success',
 			});
-		} else if (result && bcrypt.compareSync(req.body.inputPassword, result.password) && result.roll === 'supervisor') {
+		} else if (result.roll === 'bodeguero') {
 			// session variables
-			req.session.user = result._id;
+			req.session.id = result._id;
+			req.session.user = result.user;
+			req.session.sede = result.sede;
 			req.session.roll = result.roll;
 			req.session.firstname = result.firstname;
 			req.session.lastname = result.lastname;
@@ -116,8 +123,29 @@ app.post('/login', (req, res) => {
 
 			res.render('login', {
 				login: req.body.login,
-				show: 'Bienvenido supervisor',
-				path: '/dashboardteacher',
+				show: 'Bienvenido Bodeguero',
+				path: '/dashboardbodeguero',
+				button: 'success',
+			});
+		} else if (result.roll === 'cajero') {
+			// session variables
+			req.session.id = result._id;
+			req.session.user = result.user;
+			req.session.sede = result.sede;
+			req.session.roll = result.roll;
+			req.session.firstname = result.firstname;
+			req.session.lastname = result.lastname;
+			req.session.email = result.email;
+			req.session.cc = result.cc;
+			req.session.phone = result.phone;
+			if (result.avatar) {
+				req.session.avatar = result.avatar.toString('base64');
+			}
+
+			res.render('login', {
+				login: req.body.login,
+				show: 'Bienvenido Cajero',
+				path: '/dashboardcajero',
 				button: 'success',
 			});
 		} else {
@@ -296,7 +324,7 @@ const upload = multer({
 app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
 	if (req.body.avatar) {
 		User.findOneAndUpdate(
-			{ _id: req.session.user }, { $set: { avatar: req.file.buffer } }, { new: true },
+			{ _id: req.session.id }, { $set: { avatar: req.file.buffer } }, { new: true },
 			(err, resultado) => {
 				if (err) {
 					console.log(err);
@@ -326,7 +354,7 @@ app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
 		}
 
 		User.findOneAndUpdate(
-			{ _id: req.session.user }, { $set: conditions }, { new: true },
+			{ _id: req.session.id }, { $set: conditions }, { new: true },
 			(err, resultado) => {
 				if (err) {
 					console.log(err);

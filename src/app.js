@@ -32,9 +32,9 @@ app.use(express.static(directoryPublic));
 
 // Middlewares
 app.use((req, res, next) => {
-	if (req.session.user) {
+	if (req.session.id) {
 		res.locals.session = true;
-		res.locals.user = req.session.user;
+		res.locals.user = req.session.id;
 		res.locals.firstname = req.session.firstname;
 		res.locals.lastname = req.session.lastname;
 		res.locals.usuario = req.session.usuario;
@@ -69,12 +69,9 @@ app.use((req, res, next) => {
 			res.locals.rollUser = req.session.rollUser;
 		}
 		// vars change avatar
-		if (req.session.avatar) {
-			res.locals.avatar = req.session.avatar;
-		}
-		if (req.session.administrador) {
-			res.locals.administrador = true;
-		}
+		res.locals.avatar = (req.session.avatar) ? req.session.avatar : null;
+		res.locals.administrador = (req.session.administrador) ? true : null;
+		res.locals.gerente = (req.session.gerente) ? true : null;
 	}
 	next();
 });
