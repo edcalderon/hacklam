@@ -10,6 +10,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const multer = require('multer');
 const sgMail = require('@sendgrid/mail');
+const { ObjectId } = require('mongodb');
 
 sgMail.setApiKey(APIKEY);
 require('./../helpers/helpers');
@@ -174,6 +175,57 @@ app.get('/dashboardproducts', (req, res) => {
 	});
 });
 
+app.post('/dashboardproduct', (req, res) => {
+	console.log(req.body.id);
+	Product.findOne({ _id: new ObjectId(req.body.id) }, (err, product) => {
+		if (err) {
+			console.log(err);
+		} else if (product) {
+			console.log(product);
+			res.render('dashboardupdateproduct', product);
+		} else {
+			console.log(product);
+		}
+	});
+});
+
+app.post('/dashboardupdateproduct', (req, res) => {
+	const conditions = {};
+	const {
+		id, name, type, photo, description, count, price, location,
+	} = req.body;
+
+	Object.assign(conditions, {
+		name, type, photo, description, count, price, location,
+	});
+
+	console.log(`las condiciones ${conditions}`);
+
+	Product.findOneAndUpdate(
+		{ _id: new ObjectId(id) }, { $set: conditions }, { new: true },
+		(err, resultado) => {
+			if (err) {
+				console.log(err);
+			} else if (resultado) {
+				console.log(`hola${resultado}`);
+				res.render('dashboardupdateproduct', {
+					id: resultado._id,
+					name: resultado.name,
+					type: resultado.type,
+					photo: resultado.photo,
+					description: resultado.description,
+					count: resultado.count,
+					price: resultado.price,
+					location: resultado.location,
+					resultshow: 'Datos actualizados correctamente',
+				});
+			} else {
+				console.log(err);
+			}
+		},
+	);
+});
+
 app.get('/register', (req, res) => {
 	res.render('register', {});
 });
@@ -232,17 +284,6 @@ app.get('/dashboardgerente', (req, res) => {
 			console.log(err);
 		}
 		res.render('dashboardgerente', {
-			usuarios: result,
-		});
-	});
-});
-
-app.get('/dashboarproduct', (req, res) => {
-	Product.find({}, (err, result) => {
-		if (err) {
-			console.log(err);
-		}
-		res.render('dashboarproduct', {
 			usuarios: result,
 		});
 	});
