@@ -10,20 +10,32 @@ const productSchema = new Schema({
 		unique: true,
 		lowercase: true,
 	},
+	type: {
+		type: String,
+		required: true,
+		trim: true,
+		lowercase: true,
+	},
+	photo: {
+		type: String,
+		required: true,
+		trim: true,
+		lowercase: true,
+	},
 	description: {
 		type: String,
 		required: true,
 		lowercase: true,
 	},
-	cantidad: {
+	count: {
 		type: Number,
 		required: true,
 	},
-	precio: {
-		type: Number,
+	price: {
+		type: String,
 		required: true,
 	},
-	ubicacion: {
+	location: {
 		type: String,
 		required: true,
 		trim: true,

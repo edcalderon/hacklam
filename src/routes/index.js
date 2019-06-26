@@ -163,6 +163,17 @@ app.get('/dashboarduser', (req, res) => {
 	res.render('dashboarduser', {});
 });
 
+app.get('/dashboardproducts', (req, res) => {
+	Product.find({}, (err, result) => {
+		if (err) {
+			console.log(err);
+		}
+		res.render('dashboardproducts', {
+			products: result,
+		});
+	});
+});
+
 app.get('/register', (req, res) => {
 	res.render('register', {});
 });

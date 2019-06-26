@@ -1,0 +1,46 @@
+{{>headdashboard}}
+
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Sidebar-->
+    {{>sidebardashboard}}
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div id="content">
+        <!-- Topbar -->
+        {{>topbar}}
+        <!-- End of Topbar -->
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <!-- Page Heading -->
+
+          <ul class="products">
+            {{#each products}}
+            <div class="card card-product" style="width: 18rem;">
+              <img class="card-img-top" alt="Card image cap" src="{{this.photo}}">
+              <div class="card-body">
+                <h5 class="card-title">{{this.type}} - {{this.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{this.price}}</h6>
+                <p class="card-text">{{this.description}}</p>
+                <a href="#" class="btn btn-primary">Editar</a>
+              </div>
+            </div>
+            {{/each}}
+          </ul>
+          <!-- end Content Row -->
+        </div>
+        <!-- end container-fluid -->
+      </div>
+      <!-- End of Main Content -->
+      {{>footerdashboard}}
+    </div>
+    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+  <!-- Footer -->
+
+</body>
+
+</html>

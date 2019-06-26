@@ -12476,4 +12476,12 @@ border-radius: 50%;
   font-size: 0.8rem;
   border-radius: 10rem;
 }
+.products {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.card-product {
+  margin: 10px;
+}
 /* table */
