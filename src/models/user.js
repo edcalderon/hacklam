@@ -11,6 +11,19 @@ const userSchema = new Schema({
 		unique: true,
 		lowercase: true,
 	},
+	user: {
+		type: String,
+		required: true,
+		trim: true,
+		unique: true,
+		lowercase: true,
+	},
+	sede: {
+		type: String,
+		required: true,
+		trim: true,
+		lowercase: true,
+	},
 	firstname: {
 		type: String,
 		required: 'name is Required',

@@ -12472,5 +12472,8 @@ border-radius: 50%;
   height: 516px;
   overflow-y: auto;
 }
-
+.form-select-user {
+  font-size: 0.8rem;
+  border-radius: 10rem;
+}
 /* table */

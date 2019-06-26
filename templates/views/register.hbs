@@ -10,7 +10,9 @@
   <title>Registro</title>
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.css" rel="stylesheet">
 </head>
@@ -26,54 +28,104 @@
           <div class="col-lg-7">
             <div class="p-5">
               {{#if registro}}
-        			<h2 class="text-center" id="title">{{{show}}}</h2>
+              <h2 class="text-center" id="title">{{{show}}}</h2>
               {{/if}}
-
+              {{#if administrador}}
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Crea un usuario!</h1>
               </div>
               <form class="user" method="Post" action="/register">
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="text" class="form-control form-control-user" name="firstName" id="firstName" placeholder="Nombre" required>
+                    <input type="text" class="form-control form-control-user" name="firstName" id="firstName"
+                      placeholder="Nombre" required>
                   </div>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" name="lastName" id="lastName" placeholder="Apellidos" required>
+                    <input type="text" class="form-control form-control-user" name="lastName" id="lastName"
+                      placeholder="Apellidos" required>
                   </div>
                 </div>
                 <div class="form-group">
-                  <input type="email" class="form-control form-control-user" name="inputEmail" id="inputEmail" placeholder="Email" required>
+                  <input type="email" class="form-control form-control-user" name="inputEmail" id="inputEmail"
+                    placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-user" name="usera" id="user"
+                    placeholder="Usuario" required>
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="password" class="form-control form-control-user" name="inputPassword" id="inputPassword" placeholder="Contraseña" required>
+                    <input type="password" class="form-control form-control-user" name="inputPassword"
+                      id="inputPassword" placeholder="Contraseña" required>
                   </div>
                   <div class="col-sm-6">
-                    <input type="password" class="form-control form-control-user" name="repeatPassword" id="repeatPassword" placeholder="Repite Contraseña" required>
+                    <input type="password" class="form-control form-control-user" name="repeatPassword"
+                      id="repeatPassword" placeholder="Repite Contraseña" required>
                   </div>
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="tel" class="form-control form-control-user" name="phone" id="phone" placeholder="Telefono" required>
+                    <input type="tel" class="form-control form-control-user" name="phone" id="phone"
+                      placeholder="Telefono" required>
                   </div>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" name="cedula" id="cedula" placeholder="Cedula" required>
+                    <input type="text" class="form-control form-control-user" name="cedula" id="cedula"
+                      placeholder="Cedula" required>
                   </div>
                 </div>
-                <input type="hidden" name="registro"  value="registro">
-                <input type="submit" class="btn btn-primary btn-user btn-block"  value="Registrar" data-toggle="modal" data-target="#myModal2">
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input type="text" class="form-control form-control-user" name="sede" id="sede" placeholder="Sede"
+                      required>
+                  </div>
+                  <div class="col-sm-6">
+                      <select class="form-control form-select-user" name="roll" id="roll">
+                        <option>Gerente</option>
+                        <option>Bodeguero</option>
+                        <option>Cajero</option>
+                      </select>
+                  </div>
+                </div>
+                <input type="hidden" name="registro" value="registro">
+                <input type="submit" class="btn btn-primary btn-user btn-block" value="Registrar" data-toggle="modal"
+                  data-target="#myModal2">
               </form>
               <hr>
-              <div class="text-center">
-                <a class="small" href="#">Perdiste la contraseña?</a>
-              </div>
-              <div class="text-center">
-                <a class="small" href="/loginregister">Ya tienes una cuenta? Logeate!</a>
-              </div>
               <div class="text-center">
                 <a class="small" href="/indexdashboard">Volver</a>
               </div>
               <hr>
+              {{else}}
+              {{#if gerente}}
+              <a href="">buena la cosa</a>
+              {{else}}
+              <div class="row">
+
+                <!-- Area Chart -->
+                <div class="col-xl-12 col-lg-8">
+                  <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-primary">Upss</h6>
+
+                    </div>
+                    <!-- Card Body -->
+                    <div id="container" class="card-body">
+                      <h2>Ups! no tienes acceso a esta pagina logeate</h2>
+                    </div>
+                  </div>
+                </div>
+                <!-- Pie Chart -->
+                <!-- Content Row final space -->
+                <div class="row">
+                  <!-- Content Column -->
+                  <div class="col-lg-6 mb-4"></div>
+                  <div class="col-lg-6 mb-4"></div>
+                </div>
+                <!-- Content Row final space-->
+              </div>
+              {{/if}}
+              {{/if}}
             </div>
           </div>
         </div>
@@ -84,31 +136,32 @@
 
 
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
 
   <!-- Custom scripts check Passwords-->
   <script>
-  	var password = document.getElementById("inputPassword")
-  	  , confirm_password = document.getElementById("repeatPassword");
+    var password = document.getElementById("inputPassword")
+      , confirm_password = document.getElementById("repeatPassword");
 
-  	function validatePassword(){
-  	  if(password.value != confirm_password.value) {
-  	    confirm_password.setCustomValidity("Passwords Don't Match");
-  	  } else {
-  	    confirm_password.setCustomValidity('');
-  	  }
-  	}
-  	password.onchange = validatePassword;
-  	confirm_password.onkeyup = validatePassword;
+    function validatePassword() {
+      if (password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("Passwords Don't Match");
+      } else {
+        confirm_password.setCustomValidity('');
+      }
+    }
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;
   </script>
 
-  </body>
+</body>
+
 </html>

@@ -43,25 +43,25 @@ app.get('/indexdashboard', (req, res) => {
 	res.render('indexdashboard', {});
 });
 
-app.get('/loginregister', (req, res) => {
-	res.render('loginregister', {});
+app.get('/login', (req, res) => {
+	res.render('login', {});
 });
 
-app.post('/loginregister', (req, res) => {
+app.post('/login', (req, res) => {
 	User.findOne({ email: req.body.inputEmail }, (err, result) => {
 		if (!result) {
 			console.log(result);
-			res.render('loginregister', {
+			res.render('login', {
 				login: req.body.login,
 				show: 'Usuario o contraseña incorrectas',
-				path: '/loginregister',
+				path: '/login',
 				button: 'danger',
 			});
 		} else if (result && !bcrypt.compareSync(req.body.inputPassword, result.password)) {
-			res.render('loginregister', {
+			res.render('login', {
 				login: req.body.login,
 				show: 'Usuario o contraseña incorrectas',
-				path: '/loginregister',
+				path: '/login',
 				button: 'danger',
 			});
 		} else if (result && bcrypt.compareSync(req.body.inputPassword, result.password) && result.roll === 'administrador') {
@@ -77,7 +77,7 @@ app.post('/loginregister', (req, res) => {
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
-			res.render('loginregister', {
+			res.render('login', {
 				login: req.body.login,
 				show: 'Bienvenido.',
 				path: '/dashboardadmin',
@@ -95,7 +95,7 @@ app.post('/loginregister', (req, res) => {
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
-			res.render('loginregister', {
+			res.render('login', {
 				login: req.body.login,
 				show: 'Usuario y Contraseña correctas! ya puedes continuar.',
 				path: '/dashboarduser',
@@ -114,19 +114,18 @@ app.post('/loginregister', (req, res) => {
 				req.session.avatar = result.avatar.toString('base64');
 			}
 
-			res.render('loginregister', {
+			res.render('login', {
 				login: req.body.login,
 				show: 'Bienvenido supervisor',
 				path: '/dashboardteacher',
 				button: 'success',
 			});
 		} else {
-			res.render('loginregister', {
+			res.render('login', {
 				registro: req.body.registro,
 				show: 'Error',
 			});
 		}
-		console.log('algo5');
 	});
 });
 
@@ -143,10 +142,12 @@ app.post('/register', (req, res) => {
 		firstname: req.body.firstName,
 		lastname: req.body.lastName,
 		email: req.body.inputEmail,
+		user: req.body.user,
 		password: bcrypt.hashSync(req.body.inputPassword, 10),
 		phone: req.body.phone,
 		cc: req.body.cedula,
-		roll: 'cajero',
+		roll: req.body.roll,
+		sede: req.body.sede,
 	});
 	user.save((err) => {
 		if (err) {
@@ -168,7 +169,7 @@ app.post('/register', (req, res) => {
 
 		res.render('register', {
 			registro: req.body.registro,
-			show: "<a href='/loginregister' >Registro exitoso! ya puedes ingresar </a>",
+			show: "<a href='/login' >Registro exitoso!</a>",
 		});
 	});
 });
@@ -206,18 +207,20 @@ app.get('/dashboardadmintable', (req, res) => {
 });
 
 app.post('/dashboardadmin', (req, res) => {
-	User.findOne({ cc: req.body.busqueda }, (err, results) => {
+	User.findOne({ cc: req.body.busqueda }, (err, result) => {
 		if (err) {
 			console.log(err);
-		} else if (results) {
-			req.session.usuario = results;
+		} else if (result) {
+			req.session.usuario = result;
 			res.render('dashboardupdateuser', {
-				firstnameUser: results.firstname,
-				lastnameUser: results.lastname,
-				phoneUser: results.phone,
-				rollUser: results.roll,
-				ccUser: results.cc,
-				emailUser: results.email,
+				firstnameUser: result.firstname,
+				lastnameUser: result.lastname,
+				emailUser: result.email,
+				user: result.user,
+				phoneUser: result.phone,
+				ccUser: result.cc,
+				rollUser: result.roll,
+				sedeUser: result.sede,
 			});
 		} else {
 			res.render('dashboardadmin');
