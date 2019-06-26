@@ -213,6 +213,17 @@ app.get('/dashboardadmin', (req, res) => {
 	});
 });
 
+app.get('/dashboardgerente', (req, res) => {
+	User.find({ sede: req.session.sede }, (err, result) => {
+		if (err) {
+			console.log(err);
+		}
+		res.render('dashboardgerente', {
+			usuarios: result,
+		});
+	});
+});
+
 app.get('/dashboarproduct', (req, res) => {
 	Product.find({}, (err, result) => {
 		if (err) {
