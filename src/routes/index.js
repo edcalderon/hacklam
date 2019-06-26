@@ -48,8 +48,10 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-	User.findOne({ email: req.body.inputEmail }, (err, result) => {
-		if (!result) {
+	User.findOne({ user: req.body.inputUser }, (err, result) => {
+		if (err) {
+			console.log(err);
+		} else if (!result) {
 			console.log(result);
 			res.render('login', {
 				login: req.body.login,
