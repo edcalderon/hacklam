@@ -164,17 +164,6 @@ app.get('/dashboarduser', (req, res) => {
 	res.render('dashboarduser', {});
 });
 
-app.get('/dashboardproducts', (req, res) => {
-	Product.find({}, (err, result) => {
-		if (err) {
-			console.log(err);
-		}
-		res.render('dashboardproducts', {
-			products: result,
-		});
-	});
-});
-
 app.post('/dashboardproduct', (req, res) => {
 	console.log(req.body.id);
 	Product.findOne({ _id: req.body.id }, (err, product) => {
@@ -200,6 +189,18 @@ const upload = multer({
 		}
 		cb(null, true);
 	},
+});
+
+app.get('/dashboarduser', (req, res) =>{
+	Product.find({}, (err,result)=>{
+		if(err){
+			console.log(err)
+		}	
+		res.render ('dashboarduser',{
+			listarproductos: req.query.listarproductos,
+			articulos: result
+		})
+	})
 });
 
 app.post('/dashboardupdateproduct', upload.single('imagenProducto'), (req, res) => {
