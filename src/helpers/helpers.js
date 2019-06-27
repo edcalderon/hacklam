@@ -1,27 +1,30 @@
 const hbs = require('hbs');
-const fs = require('fs');
-const data = require('./../data.js');
-const app = require('./../app.js');
-var jsdom = require('jsdom');
-$ = require('jquery')(new jsdom.JSDOM().window);
-const listaCursos = data.listadecursos;
-const User = require('./../models/user');
-const Course = require('./../models/course');
-const session = require('express-session');
 
-const listaUsuarios = data.listadeusuarios;
-listaPersonas = data.listadeusuarios;
-listaInscritos = [];
-listaActualizaUsuarios = [];
-
-//Listar cursos disponibles mongo (interesados)
+hbs.registerHelper('listarUsuarios', (usuarios) => {
+	let texto = '';
+	usuarios.forEach((usr) => {
+		texto += `<tr role="row" class="odd">
+			 <td class="sorting_1">${usr.firstname}</td>
+			 <td>${usr.lastname}</td>
+			 <td>${usr.cc}</td>
+			 <td class="cell100 column4">   
+			   <div class="inblock" >
+				 <i id="edit" data-id="${usr.cc}" class="fa fa-pencil" ></i>
+				 <i id="delete" data-id="${usr.cc}" class="fa fa-trash"></i>
+				 <input type="checkbox" data-id="${usr.cc}" class="check"/> 
+			   </div>
+			 </td>
+            </tr>`;
+	});
+	return texto;
+});
 
 hbs.registerHelper('disponibleCourses', (listado) => {
-	let texto = " ";
+	let texto = ' ';
 	let count = 1;
-		listado.forEach ( curso => {
-				console.log(curso.nombre);
-		     texto = texto + `<div id='accordion'>
+	listado.forEach((curso) => {
+		console.log(curso.nombre);
+		texto += `<div id='accordion'>
 				 <div class="card mb-2">
 				     <div class="card-header" id="heading${count}">
 				       <h5 class="mb-0">
@@ -39,14 +42,14 @@ hbs.registerHelper('disponibleCourses', (listado) => {
 				     </div>
 				  </div>
 					</div>`;
-			 console.log(count)
-			 count++;
-		});
-		return texto;
-		console.log(texto);
+		console.log(count);
+		count += 1;
+	});
+	console.log(texto);
+	return texto;
 });
 
-//Incribir cursos con mongodb y listarlos mongo
+// Incribir cursos con mongodb y listarlos mongo
 
 hbs.registerHelper('inscription', (listado) => {
 	let texto = `	<form action="/dashboarduser" method="post">
@@ -60,8 +63,8 @@ hbs.registerHelper('inscription', (listado) => {
 					<th></th>
 					</thead>
 					<tbody>`;
-		listado.forEach(materia =>{
-			texto = texto +
+	listado.forEach((materia) => {
+		texto +=
 					`<tr>
 					<td> ${materia.name} </td>
 					<td> ${materia.value} </td>
@@ -70,12 +73,12 @@ hbs.registerHelper('inscription', (listado) => {
 					<td><button class="btn btn-primary" name="ver" id="informacion">Ver</button></td>
 					<td><button class="btn btn-primary" name="inscribir" value="${materia.name}">Inscribir</button></td>
 					</tr> `;
-		})
-	texto = texto + '</tbody> </table></form>';
+	});
+	texto += '</tbody> </table></form>';
 	return texto;
 });
 
-//Cerrar cursos y listarlos mongo
+// Cerrar cursos y listarlos mongo
 
 hbs.registerHelper('closeCourse', (courses) => {
 	let texto = `	<form action="/dashboardadmin" method="post">
@@ -90,17 +93,16 @@ hbs.registerHelper('closeCourse', (courses) => {
 					<th></th>
 					</thead>
 					<tbody>`;
-		courses.forEach(course =>{
+	courses.forEach((course) => {
+		// switch
+		let switchVal = 'cerrar';
+		if (course.state === 'Cerrado') {
+			switchVal = 'abrir';
+		}
+		console.log(course.students);
+		const myJSON = JSON.stringify(course.students);
 
-			// switch
-			let switchVal = "cerrar"
-  		if(course.state == "Cerrado"){
-    			switchVal  = "abrir"
-			}
-      console.log(course.students);
-			var myJSON = JSON.stringify(course.students);
-
-			texto = texto +
+		texto +=
 					`<tr>
 					<td> ${course.name} </td>
 					<td> ${course.value} </td>
@@ -121,12 +123,12 @@ hbs.registerHelper('closeCourse', (courses) => {
 					</td>
 					<td><button class="btn btn-primary" type="submit" name=${switchVal} value="${course.name}">${switchVal}</button></td>
 					</tr> `;
-		})
-	texto = texto + "</tbody> </table><input type='hidden' name='asigna'  value='asigna'></form>";
+	});
+	texto += "</tbody> </table><input type='hidden' name='asigna'  value='asigna'></form>";
 	return texto;
 });
 
-//Eliminar inscripcion mongo
+// Eliminar inscripcion mongo
 
 hbs.registerHelper('cancelIncription', (miscursos) => {
 	let texto = `	<form action="/dashboarduser" method="post">
@@ -139,8 +141,8 @@ hbs.registerHelper('cancelIncription', (miscursos) => {
 					<th></th>
 					</thead>
 					<tbody>`;
-		miscursos.forEach(materia =>{
-			texto = texto +
+	miscursos.forEach((materia) => {
+		texto +=
 					`<tr>
 					<td> ${materia.name} </td>
 					<td> ${materia.value} </td>
@@ -148,12 +150,12 @@ hbs.registerHelper('cancelIncription', (miscursos) => {
 					<td> ${materia.modality} </td>
 					<td><button class="btn btn-danger" name="eliminar" value="${materia.name}">Cancelar</button></td>
 					</tr> `;
-		})
-	texto = texto + '</tbody> </table></form>';
+	});
+	texto += '</tbody> </table></form>';
 	return texto;
 });
 
-//Modificar usuarios y listarlos mongo
+// Modificar usuarios y listarlos mongo
 
 hbs.registerHelper('modifyUser', (misusuarios) => {
 	let texto = `	<form action="/dashboardadmin" method="post">
@@ -165,34 +167,34 @@ hbs.registerHelper('modifyUser', (misusuarios) => {
 					<th></th>
 					</thead>
 					<tbody>`;
-		misusuarios.forEach(usuario =>{
-			texto = texto +
+	misusuarios.forEach((usuario) => {
+		texto +=
 					`<tr>
 					<td> ${usuario.firstname} </td>
 					<td> ${usuario.lastname} </td>
 					<td> ${usuario.cc}</td>
 					<td><button class="btn btn-info" name="modificar" value="${usuario._id}">Modificar</button></td>
 					</tr> `;
-		})
-	texto = texto + "</tbody> </table></form>";
+	});
+	texto += '</tbody> </table></form>';
 	return texto;
 });
 
-//Listar y asignar docentes mongo
+// Listar y asignar docentes mongo
 
 hbs.registerHelper('assignTeacher', (teachers) => {
 	let texto = `	<form action="/dashboardadmin" method="post" name="myform">
 					<select class="form-control" name='profesor' onchange="myform.submit()">
 					<option selected="">Elija el profesor</option>`;
-		teachers.forEach(teacher =>{
-			texto = texto +
+	teachers.forEach((teacher) => {
+		texto +=
 					`<option value="${teacher.cc}">${teacher.firstname}</option>`;
-		})
-	texto = texto + '</select></form>';
+	});
+	texto += '</select></form>';
 	return texto;
 });
 
-//Informacion cursos y estudiantes (profesor) mongo
+// Informacion cursos y estudiantes (profesor) mongo
 
 hbs.registerHelper('infoTeachers', (materias) => {
 	let texto = `	<form action="/dashboardadmin" method="post">
@@ -206,98 +208,35 @@ hbs.registerHelper('infoTeachers', (materias) => {
 					<th></th>
 					</thead>
 					<tbody>`;
-		materias.forEach(element => {
-			curso = element.cursos;
-			curso.forEach(c => {
-				console.log('estudiantes en curso ' + c.name + ': '  + c.students);
-				var students = JSON.stringify(c.students);
-				console.log(students)
+	materias.forEach((element) => {
+		const { cursos } = element;
+		cursos.forEach((curso) => {
+			console.log(`estudiantes en curso ${curso.name}: ${curso.students}`);
+			const students = JSON.stringify(curso.students);
+			console.log(students);
 
-				texto = texto +
+			texto +=
 						`<tr>
-						<td> ${c.name} </td>
-						<td> ${c.value} </td>
-						<td> ${c.intensity}</td>
-						<td> ${c.modality} </td>
-						<td> ${c.state}</td>
+						<td> ${curso.name} </td>
+						<td> ${curso.value} </td>
+						<td> ${curso.intensity}</td>
+						<td> ${curso.modality} </td>
+						<td> ${curso.state}</td>
 						<td>
 							<p>
-							  <button class="btn btn-primary" type="submit" data-toggle="collapse" data-target="#collapseExample${c.name}" aria-expanded="false" aria-controls="collapseExample${c.name}" name="inscritos" value="${c.name}">
+							  <button class="btn btn-primary" type="submit" data-toggle="collapse" data-target="#collapseExample${curso.name}" aria-expanded="false" aria-controls="collapseExample${curso.name}" name="inscritos" value="${curso.name}">
 							    estudiantes
 							  </button>
 							</p>
-							<div class="collapse" id="collapseExample${c.name}">
+							<div class="collapse" id="collapseExample${curso.name}">
 							  <div class="card card-body">
 							     ${students}
 							  </div>
 							</div>
 						</td>
 						</tr> `;
-			})
-		})
-	texto = texto + "</tbody></table></form>";
-	return texto;
-});
-
-
-// helpers viejos --------------------
-
-hbs.registerHelper('listarCursosDisponibles', ()=>{
-let texto = " ";
-let count = 1;
-	listaCursos.forEach ( curso => {
-		if(curso.estado == "disponible"){
-			console.log(curso.nombre);
-	     texto = texto + `<div id='accordion'>
-			 <div class="card mb-2">
-			     <div class="card-header" id="heading${count}">
-			       <h5 class="mb-0">
-			         <button class="btn btn-link" data-toggle="collapse" data-target="#collapse${count}" aria-expanded="true" aria-controls="collapse${count}">
-			          CURSO: ${curso.nombre} VALOR: ${curso.valor} DESCRIPCION: ${curso.descripcion}
-			         </button>
-			       </h5>
-			     </div>
-			     <div id="collapse${count}" class="collapse " aria-labelledby="heading${count}" data-parent="#accordion">
-			       <div class="card-body">
-			        DESCRIPCION: ${curso.descripcion} MODALIDAD: ${curso.modalidad} INTENSIDAD HORARIA: ${curso.intensidadhoraria}
-			       </div>
-			     </div>
-			  </div>
-				</div>`;
-		 }
-		 console.log(count)
-		 count++;
+		});
 	});
-	return texto;
-	console.log(texto);
-});
-
-hbs.registerHelper('listarCursos', ()=>{
-	let texto = "<table class='table table-hover'>\
-				<thead>\
-				<th> Nombre </th>\
-				<th> Descripcion </th>\
-				<th> id </th>\
-				<th> valor </th>\
-				<th> intensidadhoraria </th>\
-				<th> modalidad </th>\
-				<th> estado </th>\
-				</thead>\
-				<tbody>";
-
-	listaCursos.forEach ( curso => {
-		texto = texto +
-				'<tr>'+
-					'<td>'+ curso.nombre + '</td>' +
-					'<td>'+ curso.descripcion + '</td>' +
-					'<td>'+ curso.id +'</td>' +
-					'<td>'+ curso.valor +'</td>' +
-					'<td>'+ curso.intensidadhoraria +'</td>' +
-					'<td>'+ curso.modalidad +'</td>' +
-					'<td>'+ curso.estado + '</td>' +
-				'</tr>'
-				'</tbody>'
-				'</table>';
-	});
+	texto += '</tbody></table></form>';
 	return texto;
 });

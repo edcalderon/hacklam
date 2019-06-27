@@ -3,7 +3,7 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
     <!-- Sidebar-->
-    {{#if coordinador}}
+    {{#if administrador}}
       {{>sidebardashboard}}
     {{/if}}
     <!-- Content Wrapper -->
@@ -15,10 +15,34 @@
         <!-- End of Topbar -->
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          {{#if coordinador}}
-          <!-- Page Heading -->
-
+        <a class="dropdown-item" href="/register">
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          Registrar mas usuarios
+        </a>
+          {{#if administrador}}
+          <div class="card">
+            <div class="card-body">
+                      <div class="limiter">
+            <div class="container-table100">
+                <div class="wrap-table100">
+                  <div class="row">     
+                    <form action="/dashboardadmin" method="post" >	
+                        <div class="form-row">  
+                            <div class="col "><input type="text"   name="busqueda" placeholder="editar por cedula" ></div>    
+                            <div class="col "><button type="submit" class="btn btn-primary"> buscar </button></div>         
+                        </div>                      
+                    </form>
+                 </div>   
+                 <br></br>
+                 {{>usersadmintable}}
+                  </div>
+                </div>    
+            </div>
+           </div>
+          </div>  
+        </div>
         <!-- /.container-fluid -->
+
         {{else}}
         <div class="row">
 
@@ -121,6 +145,5 @@
     </div>
   </div>
 {{/if}}
-
-</body>
+</body>        
 </html>

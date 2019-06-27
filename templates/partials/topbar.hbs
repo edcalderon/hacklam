@@ -181,7 +181,7 @@
             <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
             Perfil
           </a>
-          {{#if coordinador}}
+          {{#if administrador}}
           <a class="dropdown-item" href="/dashboardadmin">
             <i class="fa fa-tachometer fa-sm fa-fw mr-2 text-gray-400"></i>
             Dashboard
@@ -208,12 +208,9 @@
       </a>
       <!-- Dropdown - User Information -->
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-        <a class="dropdown-item" href="/register">
-          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-          Registrarse
-        </a>
+
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="/loginregister" >
+        <a class="dropdown-item" href="/login" >
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
           Entrar
         </a>
