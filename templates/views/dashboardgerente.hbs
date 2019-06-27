@@ -3,7 +3,7 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
     <!-- Sidebar-->
-    {{#if administrador}}
+    {{#if gerente}}
       {{>sidebardashboard}}
     {{/if}}
     <!-- Content Wrapper -->
@@ -19,7 +19,7 @@
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
           Registrar mas usuarios
         </a>
-          {{#if administrador}}
+          {{#if gerente}}
           <div class="card">
             <div class="card-body">
                       <div class="limiter">

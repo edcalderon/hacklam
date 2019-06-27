@@ -1,32 +1,45 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const productSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
-    lowercase: true
-  },
-  description: {
-    type: String,
-    required: true,
-    lowercase: true
-  },
-  cantidad: {
-    type: Number,
-    required: true
-  },
-  precio: {
-    type: Number,
-    required: true
-  },
-  ubicacion: {
-    type: String,
-    required: true,
-    trim: true
-  }
+	name: {
+		type: String,
+		required: true,
+		trim: true,
+		unique: true,
+		lowercase: true,
+	},
+	type: {
+		type: String,
+		required: true,
+		trim: true,
+		lowercase: true,
+	},
+	photo: {
+		type: String,
+		required: true,
+		trim: true,
+		lowercase: true,
+	},
+	description: {
+		type: String,
+		required: true,
+		lowercase: true,
+	},
+	count: {
+		type: Number,
+		required: true,
+	},
+	price: {
+		type: String,
+		required: true,
+	},
+	location: {
+		type: String,
+		required: false,
+		trim: true,
+	},
 });
 
 // create mongoose model
