@@ -1,3 +1,4 @@
 .env
 /mongodb-data2
 /mongodb-data
+/node_modules
