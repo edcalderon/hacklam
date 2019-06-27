@@ -267,6 +267,48 @@ app.post('/register', (req, res) => {
 	});
 });
 
+app.get('/createproduct', (req, res) => {
+	res.render('createproduct', {});
+});
+
+app.post('/createproduct', (req, res) => {
+	const {
+		name, type, photo, description, count, price, location,
+	} = req.body;
+	const product = new Product({
+		name, type, photo, description, count, price, location,
+	});
+	product.save((err, producto) => {
+		if (err) {
+			console.log(err);
+			res.render('dashboardupdateproduct', {
+				registro: req.body.registro,
+				show: 'Upss! el producto no se pudo registrar',
+			});
+		}
+
+		res.render('dashboardupdateproduct', producto);
+	});
+});
+
+app.post('/deleteproduct', (req, res) => {
+	const {	id } = req.body;
+	Product.deleteOne({ _id: new ObjectId(id) }, (err) => {
+		if (err) {
+			console.log(err);
+			res.render('dashboardupdateproduct', {
+				registro: req.body.registro,
+				show: 'Upss! el producto no se pudo borrar',
+			});
+		} else {
+			res.render('dashboardupdateproduct', {
+				registro: req.body.registro,
+				show: "<a href='/dashboardproducts' >Borrado exitoso!</a>",
+			});
+		}
+	});
+});
+
 app.get('/dashboardadmin', (req, res) => {
 	User.find({}, (err, result) => {
 		if (err) {

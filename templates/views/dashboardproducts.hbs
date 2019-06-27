@@ -16,6 +16,13 @@
         <div class="container-fluid">
           <!-- Page Heading -->
 
+          <a class="dropdown-item" href="/createproduct">
+            <i class="fas fa-store-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            Crear producto
+          </a>
+          {{#if registro}}
+          <h2 class="text-center" id="title">{{{show}}}</h2>
+          {{/if}}
           <ul class="products">
             {{#each products}}
             <div class="card card-product" style="width: 18rem;">
@@ -24,10 +31,10 @@
                 <h5 class="card-title">{{this.type}} - {{this.name}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{this.price}}</h6>
                 <p class="card-text">{{this.description}}</p>
-                <form action="/dashboardproduct" method="post" >	
-                  <input type="hidden" value="{{this._id}}"  name="id">
-                  <button type="submit" class="btn btn-primary">Editar</button>             
-                </form>                
+                <form action="/dashboardproduct" method="post">
+                  <input type="hidden" value="{{this._id}}" name="id">
+                  <button type="submit" class="btn btn-primary">Editar</button>
+                </form>
               </div>
             </div>
             {{/each}}
