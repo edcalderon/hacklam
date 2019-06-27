@@ -10,7 +10,6 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const multer = require('multer');
 const sgMail = require('@sendgrid/mail');
-const { ObjectId } = require('mongodb');
 
 sgMail.setApiKey(APIKEY);
 require('./../helpers/helpers');
@@ -177,7 +176,7 @@ app.get('/dashboardproducts', (req, res) => {
 
 app.post('/dashboardproduct', (req, res) => {
 	console.log(req.body.id);
-	Product.findOne({ _id: new ObjectId(req.body.id) }, (err, product) => {
+	Product.findOne({ _id: req.body.id }, (err, product) => {
 		if (err) {
 			console.log(err);
 		} else if (product) {
@@ -202,7 +201,7 @@ app.post('/dashboardupdateproduct', (req, res) => {
 	console.log(`las condiciones ${conditions}`);
 
 	Product.findOneAndUpdate(
-		{ _id: new ObjectId(id) }, { $set: conditions }, { new: true },
+		{ _id: id }, { $set: conditions }, { new: true },
 		(err, resultado) => {
 			if (err) {
 				console.log(err);
@@ -293,7 +292,7 @@ app.post('/createproduct', (req, res) => {
 
 app.post('/deleteproduct', (req, res) => {
 	const {	id } = req.body;
-	Product.deleteOne({ _id: new ObjectId(id) }, (err) => {
+	Product.deleteOne({ _id: id }, (err) => {
 		if (err) {
 			console.log(err);
 			res.render('dashboardupdateproduct', {
