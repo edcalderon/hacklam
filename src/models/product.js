@@ -17,10 +17,7 @@ const productSchema = new Schema({
 		lowercase: true,
 	},
 	photo: {
-		type: String,
-		required: true,
-		trim: true,
-		lowercase: true,
+		type: Buffer,
 	},
 	description: {
 		type: String,
@@ -29,7 +26,7 @@ const productSchema = new Schema({
 	},
 	count: {
 		type: Number,
-		required: true,
+		required: false,
 	},
 	price: {
 		type: String,

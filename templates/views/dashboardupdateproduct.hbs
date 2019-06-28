@@ -22,29 +22,10 @@
           </div>
 
           <!-- Area Chart -->
-          <div class="col-xs-7 d-flex justify-content-center">
-            <div class="col-xl-5 col-lg-8">
-              <div class="card shadow mb-4 center-block">
-
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  {{#if registro}}
-                  <h2 class="text-center" id="title">{{{show}}}</h2>
-                  {{/if}}
-                  <h6 class="m-0 font-weight-bold text-primary">Modificar producto: {{name}}</h6>
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                  </div>
-                </div>
-                <div class="card-body">
-                  {{>adminproductupdateform}}
-                </div>
-              </div>
-            </div>
-          </div>
-
+          {{#if registro}}
+          <h2 class="text-center" id="title">{{{show}}}</h2>
+          {{/if}}
+          {{>adminproductupdateform}}
 
           <div class="row">
             <!-- Content Column -->
