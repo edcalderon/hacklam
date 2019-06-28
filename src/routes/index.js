@@ -10,7 +10,6 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const multer = require('multer');
 const sgMail = require('@sendgrid/mail');
-const { ObjectId } = require('mongodb');
 
 sgMail.setApiKey(APIKEY);
 require('./../helpers/helpers');
@@ -177,7 +176,7 @@ app.get('/dashboardproducts', (req, res) => {
 
 app.post('/dashboardproduct', (req, res) => {
 	console.log(req.body.id);
-	Product.findOne({ _id: new ObjectId(req.body.id) }, (err, product) => {
+	Product.findOne({ _id: req.body.id }, (err, product) => {
 		if (err) {
 			console.log(err);
 		} else if (product) {
@@ -189,27 +188,43 @@ app.post('/dashboardproduct', (req, res) => {
 	});
 });
 
-app.post('/dashboardupdateproduct', (req, res) => {
+// Multer destin folder
+const upload = multer({
+	limits: {
+		fileSize: 10000000,
+	},
+	fileFilter(req, file, cb) {
+		if (!file.originalname.match(/\.(jpg|png|jpeg|JPG|PNG|JPEG)$/)) {
+			cb(new Error('No es un archivo valido'));
+		}
+		cb(null, true);
+	},
+});
+
+app.post('/dashboardupdateproduct', upload.single('imagenProducto'), (req, res) => {
 	const conditions = {};
 	const {
-		id, name, type, photo, description, count, price, location,
+		id, name, type, description, count, price, location,
 	} = req.body;
-
 	Object.assign(conditions, {
-		name, type, photo, description, count, price, location,
+		name, type, description, count, price, location,
 	});
-
-	console.log(`las condiciones ${conditions}`);
+	if (req.file) {
+		Object.assign(conditions, { photo: req.file.buffer });
+	}
 
 	Product.findOneAndUpdate(
-		{ _id: new ObjectId(id) }, { $set: conditions }, { new: true },
+		{ _id: id }, { $set: conditions }, { new: true },
 		(err, resultado) => {
 			if (err) {
 				console.log(err);
-			} else if (resultado) {
-				console.log(`hola${resultado}`);
 				res.render('dashboardupdateproduct', {
-					id: resultado._id,
+					registro: true,
+					show: 'No se pudo actualizar este producto',
+				});
+			} else if (resultado) {
+				res.render('dashboardupdateproduct', {
+					_id: resultado._id,
 					name: resultado.name,
 					type: resultado.type,
 					photo: resultado.photo,
@@ -220,7 +235,11 @@ app.post('/dashboardupdateproduct', (req, res) => {
 					resultshow: 'Datos actualizados correctamente',
 				});
 			} else {
-				console.log(err);
+				console.log(resultado);
+				res.render('dashboardupdateproduct', {
+					registro: true,
+					show: 'No se pudo actualizar este producto',
+				});
 			}
 		},
 	);
@@ -271,13 +290,14 @@ app.get('/createproduct', (req, res) => {
 	res.render('createproduct', {});
 });
 
-app.post('/createproduct', (req, res) => {
+app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 	const {
-		name, type, photo, description, count, price, location,
+		name, type, description, count, price, location,
 	} = req.body;
 	const product = new Product({
-		name, type, photo, description, count, price, location,
+		name, type, photo: req.file.buffer, description, count, price, location,
 	});
+	console.log(req.body);
 	product.save((err, producto) => {
 		if (err) {
 			console.log(err);
@@ -285,15 +305,20 @@ app.post('/createproduct', (req, res) => {
 				registro: req.body.registro,
 				show: 'Upss! el producto no se pudo registrar',
 			});
+		} else if (producto) {
+			res.render('dashboardupdateproduct', producto);
+		} else {
+			res.render('dashboardupdateproduct', {
+				registro: req.body.registro,
+				show: 'Upss! el producto no se pudo registrar',
+			});
 		}
-
-		res.render('dashboardupdateproduct', producto);
 	});
 });
 
 app.post('/deleteproduct', (req, res) => {
-	const {	id } = req.body;
-	Product.deleteOne({ _id: new ObjectId(id) }, (err) => {
+	const { id } = req.body;
+	Product.deleteOne({ _id: id }, (err) => {
 		if (err) {
 			console.log(err);
 			res.render('dashboardupdateproduct', {
@@ -413,19 +438,6 @@ app.post('/dashboardupdateuser', (req, res) => {
 app.get('/dashboardprofile', (req, res) => {
 	res.render('dashboardprofile', {
 	});
-});
-
-// Multer destin folder
-const upload = multer({
-	limits: {
-		fileSize: 10000000,
-	},
-	fileFilter(req, file, cb) {
-		if (!file.originalname.match(/\.(jpg|png|jpeg|JPG|PNG|JPEG)$/)) {
-			cb(new Error('No es un archivo valido'));
-		}
-		cb(null, true);
-	},
 });
 
 app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {

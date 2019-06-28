@@ -128,6 +128,12 @@ hbs.registerHelper('closeCourse', (courses) => {
 	return texto;
 });
 
+// Ayuda para la visualización de imagenes
+hbs.registerHelper('imagerSource', photo => (photo ?
+	`data:img/jpeg;base64,${photo.toString('base64')}` :
+	'../../assets/images/gallery/product_default.png'));
+
+
 // Eliminar inscripcion mongo
 
 hbs.registerHelper('cancelIncription', (miscursos) => {
