@@ -12484,4 +12484,7 @@ border-radius: 50%;
 .card-product {
   margin: 10px;
 }
+.image-product {
+  border-radius: 0% !important;
+}
 /* table */
