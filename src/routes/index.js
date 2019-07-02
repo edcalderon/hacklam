@@ -123,7 +123,6 @@ app.post('/login', (req, res) => {
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
-
 			res.render('login', {
 				login: req.body.login,
 				show: 'Bienvenido Bodeguero',

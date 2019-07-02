@@ -15,7 +15,8 @@
         <!-- End of Topbar -->
         <!-- Begin Page Content -->
         <div class="container-fluid">
-        <a class="dropdown-item" href="/register">
+        {{#if coordinador}}
+          <a class="dropdown-item" href="/register">
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
           Registrar mas usuarios
         </a>
@@ -54,6 +55,8 @@
         {{else}}
         {{>noaccess}}
         {{/if}}
+       
+      {{/if}} 
       </div>
       <!-- End of Main Content -->
     <!-- Footer -->

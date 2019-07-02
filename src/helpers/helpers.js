@@ -21,17 +21,24 @@ hbs.registerHelper('listarUsuarios', (usuarios) => {
 
 
 hbs.registerHelper('listarProductos', (productos) => {
-	let texto = '';
-	productos.forEach((producto) => {
-		texto += `<tr role="row" class="odd">
-			 <td class="sorting_1">${producto.name}</td>
-			 <td>${producto.cantidad}</td>
-			 <td>${producto.sede}</td>
-            </tr>`;
-	});
-	return texto;
-});
+	texto = ""
+	productos.forEach ( prod=> {
+	texto =  texto + `<tr role="row" class="odd">
+		 <td class="sorting_1">${prod.nombre}</td>
+		 <td>${prod.codigo}</td>
+		 <td>${prod.cantidad}</td>
+		 <td class="cell100 column4">   
+		   <div class="inblock" >
+			 <i id="edit" data-id="${prod._id}" class="fa fa-pencil" ></i>
+			 <i id="delete" data-id="${prod._id}" class="fa fa-trash"></i>
+			 <input type="checkbox" data-id="${prod._id}" class="check"/> 
+		   </div>
+		 </td>
+		</tr>`;
 
+	});
+	return texto;	
+});
 
 hbs.registerHelper('disponibleCourses', (listado) => {
 	let texto = ' ';
