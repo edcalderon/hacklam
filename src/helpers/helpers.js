@@ -19,6 +19,20 @@ hbs.registerHelper('listarUsuarios', (usuarios) => {
 	return texto;
 });
 
+
+hbs.registerHelper('listarProductos', (productos) => {
+	let texto = '';
+	productos.forEach((producto) => {
+		texto += `<tr role="row" class="odd">
+			 <td class="sorting_1">${producto.name}</td>
+			 <td>${producto.cantidad}</td>
+			 <td>${producto.sede}</td>
+            </tr>`;
+	});
+	return texto;
+});
+
+
 hbs.registerHelper('disponibleCourses', (listado) => {
 	let texto = ' ';
 	let count = 1;

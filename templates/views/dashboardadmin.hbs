@@ -44,32 +44,7 @@
         <!-- /.container-fluid -->
 
         {{else}}
-        <div class="row">
-
-        <!-- Area Chart -->
-        <div class="col-xl-12 col-lg-8">
-          <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 class="m-0 font-weight-bold text-primary">Upss</h6>
-
-            </div>
-            <!-- Card Body -->
-            <div  id="container" class="card-body">
-                      <h2>Ups! no tienes acceso a esta pagina logeate</h2>
-            </div>
-          </div>
-        </div>
-        <!-- Pie Chart -->
-        <!-- Content Row final space -->
-            <div class="row">
-              <!-- Content Column -->
-                <div class="col-lg-6 mb-4"></div>
-                <div class="col-lg-6 mb-4"></div>
-            </div>
-        <!-- Content Row final space-->
-      </div>
-
+        {{>noaccess}}
         {{/if}}
       </div>
       <!-- End of Main Content -->
