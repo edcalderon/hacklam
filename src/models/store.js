@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const storeSchema = new Schema({
-	product: {
+	producto: {
 		type: Schema.Types.ObjectId,
 		ref: 'Product',
 	},
-	name: {
+	nombre: {
 		type: String,
 		required: true,
 		trim: true,

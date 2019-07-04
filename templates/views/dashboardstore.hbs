@@ -1,14 +1,11 @@
 {{>headdashboard}}
 <body id="page-top">
   <div id="wrapper">
-    {{#if gerente}}
     {{>sidebardashboard}}
-    {{/if}}
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
         {{>topbar}}
         <div class="container-fluid">
-          {{#if gerente}}
           <div class="card">
             <div class="card-body">
               <div class="limiter">
@@ -24,9 +21,6 @@
             </div>
           </div>
         </div>
-        {{else}}
-        {{>noaccess}}
-        {{/if}}
       </div>
       {{>footerdashboard}}
     </div>

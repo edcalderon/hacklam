@@ -49,7 +49,8 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-	User.findOne({ user: req.body.inputUser }, (err, result) => {
+	const { inputUser } = req.body;
+	User.findOne({ $or: [{ email: inputUser }, { user: inputUser }] }, (err, result) => {
 		if (err) {
 			console.log(err);
 		} else if (!result) {
@@ -120,13 +121,14 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.bodeguero = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
 			res.render('login', {
 				login: req.body.login,
 				show: 'Bienvenido Bodeguero',
-				path: '/dashboardbodeguero',
+				path: '/dashboardproducts',
 				button: 'success',
 			});
 		} else if (result.roll === 'cajero') {
@@ -189,28 +191,28 @@ const upload = multer({
 	},
 });
 
-app.get('/dashboarduser', (req, res) =>{
-	Product.find({}, (err,result)=>{
-		if(err){
-			console.log(err)
-		}	
-		res.render ('dashboarduser',{
+app.get('/dashboarduser', (req, res) => {
+	Product.find({}, (err, result) => {
+		if (err) {
+			console.log(err);
+		}
+		res.render('dashboarduser', {
 			listarproductos: req.query.listarproductos,
-			articulos: result
-		})
-	})
+			articulos: result,
+		});
+	});
 });
 
 app.post('/dashboardupdateproduct', upload.single('imagenProducto'), (req, res) => {
 	const conditions = {};
 	const {
-		id, name, type, description, count, price, location,
+		id, nombre, categoria, descripcion, precio,
 	} = req.body;
 	Object.assign(conditions, {
-		name, type, description, count, price, location,
+		nombre, categoria, descripcion, precio,
 	});
 	if (req.file) {
-		Object.assign(conditions, { photo: req.file.buffer });
+		Object.assign(conditions, { imagen: req.file.buffer });
 	}
 
 	Product.findOneAndUpdate(
@@ -225,13 +227,11 @@ app.post('/dashboardupdateproduct', upload.single('imagenProducto'), (req, res) 
 			} else if (resultado) {
 				res.render('dashboardupdateproduct', {
 					_id: resultado._id,
-					name: resultado.name,
-					type: resultado.type,
-					photo: resultado.photo,
-					description: resultado.description,
-					count: resultado.count,
-					price: resultado.price,
-					location: resultado.location,
+					nombre: resultado.nombre,
+					categoria: resultado.categoria,
+					imagen: resultado.imagen,
+					descripcion: resultado.descripcion,
+					precio: resultado.precio,
 					resultshow: 'Datos actualizados correctamente',
 				});
 			} else {
@@ -292,23 +292,23 @@ app.get('/createproduct', (req, res) => {
 
 app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 	const {
-		name, type, description, count, price, location,
+		nombre, categoria, descripcion, precio,
 	} = req.body;
 	const product = new Product({
-		name, type, photo: req.file.buffer, description, count, price, location,
+		nombre, categoria, imagen: req.file.buffer, descripcion, precio,
 	});
 	console.log(req.body);
 	product.save((err, producto) => {
 		if (err) {
 			console.log(err);
-			res.render('dashboardupdateproduct', {
+			res.render('createproduct', {
 				registro: req.body.registro,
 				show: 'Upss! el producto no se pudo registrar',
 			});
 		} else if (producto) {
 			res.render('dashboardupdateproduct', producto);
 		} else {
-			res.render('dashboardupdateproduct', {
+			res.render('createproduct', {
 				registro: req.body.registro,
 				show: 'Upss! el producto no se pudo registrar',
 			});
@@ -494,8 +494,8 @@ app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
 });
 
 app.get('/addstore', (req, res) => {
-	const { id } = req.query;
-	Product.findOne({ _id: id }, (err, product) => {
+	const { nombre } = req.query;
+	Product.findOne({ nombre }, (err, product) => {
 		if (err) {
 			console.log(err);
 		} else if (product) {
@@ -507,10 +507,10 @@ app.get('/addstore', (req, res) => {
 });
 
 app.post('/addstore', (req, res) => {
-	const { id, cantidad, name } = req.body;
+	const { id, cantidad, nombre } = req.body;
 	const { sede } = req.session;
 	const store = new Store({
-		cantidad, name, product: id, sede,
+		cantidad, nombre, product: id, sede,
 	});
 	console.log(req.body);
 	store.save((err, element) => {
@@ -536,6 +536,22 @@ app.get('/dashboardstore', (req, res) => {
 		res.render('dashboardstore', {
 			productos: result,
 		});
+	});
+});
+
+app.get('/dashboardproducts', (req, res) => {
+	Product.find({}, (err, result) => {
+		if (err) {
+			console.log(err);
+		} else if (result) {
+			res.render('dashboardproducts', {
+				productos: result,
+			});
+		} else {
+			res.render('dashboardproducts', {
+				productos: {},
+			});
+		}
 	});
 });
 

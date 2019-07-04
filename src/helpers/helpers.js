@@ -19,14 +19,13 @@ hbs.registerHelper('listarUsuarios', (usuarios) => {
 	return texto;
 });
 
-
 hbs.registerHelper('listarProductos', (productos) => {
-	texto = ""
-	productos.forEach ( prod=> {
-	texto =  texto + `<tr role="row" class="odd">
+	let texto = '';
+	productos.forEach((prod) => {
+		texto += `<tr role="row" class="odd">
 		 <td class="sorting_1">${prod.nombre}</td>
-		 <td>${prod.codigo}</td>
-		 <td>${prod.cantidad}</td>
+		 <td>${prod.categoria}</td>
+		 <td>${prod.precio}</td>
 		 <td class="cell100 column4">   
 		   <div class="inblock" >
 			 <i id="edit" data-id="${prod._id}" class="fa fa-pencil" ></i>
@@ -35,9 +34,20 @@ hbs.registerHelper('listarProductos', (productos) => {
 		   </div>
 		 </td>
 		</tr>`;
-
 	});
-	return texto;	
+	return texto;
+});
+
+hbs.registerHelper('listarProductosTienda', (productos) => {
+	let texto = '';
+	productos.forEach((prod) => {
+		texto += `<tr role="row" class="odd">
+		 <td class="sorting_1">${prod.nombre}</td>
+		 <td>${prod.cantidad}</td>
+		 <td>${prod.sede}</td>
+		</tr>`;
+	});
+	return texto;
 });
 
 hbs.registerHelper('disponibleCourses', (listado) => {

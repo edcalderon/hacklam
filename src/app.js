@@ -72,6 +72,7 @@ app.use((req, res, next) => {
 		res.locals.avatar = (req.session.avatar) ? req.session.avatar : null;
 		res.locals.administrador = (req.session.administrador) ? true : null;
 		res.locals.gerente = (req.session.gerente) ? true : null;
+		res.locals.bodeguero = (req.session.bodeguero) ? true : null;
 	}
 	next();
 });

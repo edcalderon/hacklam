@@ -18,27 +18,26 @@
           {{#if registro}}
           <h2 class="text-center" id="title">{{{show}}}</h2>
           {{/if}}
-          {{#if administrador}}
           <div class="card-body">
             <div class="limiter">
               <div class="container-table100">
                 <div class="wrap-table100">
                   <div class="row">
-                    <form action="/dashboardadmin?listar=true" method="post">
+                  {{#if bodeguero}}
+                    <form action="/addStore" method="get">
                       <div class="form-row">
-                        <div class="col "><input type="text" name="busqueda" placeholder="editar por cedula"></div>
+                        <div class="col "><input type="text" name="nombre" placeholder="agregar a la tienda"></div>
                         <div class="col "><button type="submit" class="btn btn-primary"> buscar </button></div>
                       </div>
                     </form>
+                  {{/if}}
                   </div>
                   <br></br>
-                  {{>usersadmintable}}
+                  {{>productstable}}
                 </div>
               </div>
             </div>
           </div>
-          {{>noaccess}}
-          {{/if}}
           <!-- end Content Row -->
         </div>
         <!-- end container-fluid -->
