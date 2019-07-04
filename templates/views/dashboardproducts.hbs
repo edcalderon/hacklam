@@ -27,7 +27,15 @@
                     <form action="/addStore" method="get">
                       <div class="form-row">
                         <div class="col "><input type="text" name="nombre" placeholder="agregar a la tienda"></div>
-                        <div class="col "><button type="submit" class="btn btn-primary"> buscar </button></div>
+                        <div class="col "><button type="submit" class="btn btn-primary"> agregar </button></div>
+                      </div>
+                    </form>
+                  {{/if}}
+                  {{#if administrador}}
+                    <form action="/dashboardproduct" method="post">
+                      <div class="form-row">
+                        <div class="col "><input type="text" name="nombre" placeholder="editar producto"></div>
+                        <div class="col "><button type="submit" class="btn btn-primary"> editar </button></div>
                       </div>
                     </form>
                   {{/if}}

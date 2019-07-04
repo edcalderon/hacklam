@@ -165,12 +165,11 @@ app.get('/dashboarduser', (req, res) => {
 });
 
 app.post('/dashboardproduct', (req, res) => {
-	console.log(req.body.id);
-	Product.findOne({ _id: req.body.id }, (err, product) => {
+	console.log(req.body.nombre);
+	Product.findOne({ nombre: req.body.nombre }, (err, product) => {
 		if (err) {
 			console.log(err);
 		} else if (product) {
-			console.log(product);
 			res.render('dashboardupdateproduct', product);
 		} else {
 			console.log(product);
