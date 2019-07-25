@@ -526,6 +526,43 @@ app.post('/addstore', (req, res) => {
 	});
 });
 
+app.get('/dashboardstoreupdate', (req, res) => {
+	const {sede, roll} = req.session;
+	if (roll == 'administrador') {
+		Product.find({}, (err, result) => {
+			if (err) {
+				return console.log(err);
+			}
+			res.render('dashboardstoreupdate', {
+				productos: result,
+			});
+		});
+	} else {
+		Product.find({ sede }, (err, result) => {
+			if (err) {
+				console.log(err);
+			}
+			let filtro = result.filter(obj => {
+				if ('sede' in obj) return obj.sede.includes(sede);
+			});
+			filtro.forEach(obj => {
+				obj.sede = [sede];
+			})
+			res.render('dashboardstoreupdate', {
+				productos: filtro,
+			});
+		});
+	}
+});
+
+app.get('/updatestock', (req, res) => {
+	Product.updateOne({nombre: req.query.nombre}, {$set: {cantidad: req.query.cantidad}}, (err, result) => {
+		if (err) return console.log(err);
+		//res.send("<h1>Cantidad actualizada</h1><h2>Vista no terminada</h2><br><a href='/dashboardstoreupdate'><button >volver</button></a>");
+		res.render('dashboarduser');
+	});
+});
+
 app.get('/dashboardstore', (req, res) => {
 	const { sede } = req.session;
 	Store.find({ sede }, (err, result) => {

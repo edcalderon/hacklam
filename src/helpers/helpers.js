@@ -50,6 +50,50 @@ hbs.registerHelper('listarProductosTienda', (productos) => {
 	return texto;
 });
 
+let str = '"<button class="btn btn-outline-secondary" type="submit" id="button-addon2">Modificar</button>"';
+
+hbs.registerHelper('listarProductosTiendaUpdate', (productos) => {
+	let texto = '';
+	productos.forEach((prod) => {
+		texto += `<form action="/updatestock" method="get"><tr role="row" class="odd">
+		 <td class="sorting_1">${prod.nombre}</td>
+		 <td>
+			<div class="input-group mb-3">
+				<input type="number" class="form-control" placeholder="${prod.cantidad}" aria-label="cantidad" name="cantidad" aria-describedby="button-addon2">
+				<input type="text" name="nombre" value="${prod.nombre}" hidden>
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+					Modificar
+					</button>
+
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLongTitle">Éxito</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							El producto está ahora actualizado.
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+						</div>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		 </td>
+		 <td>${prod.sede}</td>
+		</tr></form>`;
+	});
+	return texto;
+});
+
 hbs.registerHelper('disponibleCourses', (listado) => {
 	let texto = ' ';
 	let count = 1;

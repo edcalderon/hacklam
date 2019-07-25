@@ -16,6 +16,10 @@ const productSchema = new Schema({
 		lowercase: true,
 		trim: true,
 	},
+	cantidad: {
+		type: Number,
+		trim: true,
+	},
 	precio: {
 		type: Number,
 		required: true,
@@ -28,6 +32,9 @@ const productSchema = new Schema({
 	imagen: {
 		type: Buffer,
 	},
+	sede: {
+		type: Array,
+	}
 });
 
 // create mongoose model
