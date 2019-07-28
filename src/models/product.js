@@ -7,8 +7,11 @@ const productSchema = new Schema({
 		type: String,
 		required: true,
 		trim: true,
-		lowercase: true,
-		unique: true,
+		lowercase: true
+	},
+	codigo: {
+		type: Number,
+		unique: true
 	},
 	categoria: {
 		type: String,
@@ -24,6 +27,9 @@ const productSchema = new Schema({
 		type: Number,
 		required: true,
 	},
+	descuento: {
+		type: Number
+	  },
 	descripcion: {
 		type: String,
 		required: true,

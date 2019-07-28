@@ -57,5 +57,19 @@
   </div>
   <!-- End of Page Wrapper -->
   <!-- Footer -->
+  <script>  
+  $(function(){       
+            $(".fa-pencil").on('click', function(){
+              var id = $(this).data("id")
+              $.ajax({
+                  method: "GET",
+                  url: `/dashboardeditararticulo?editar=${id}`
+                })
+                .done(function() {
+                    window.location = `/dashboardeditararticulo?editar=${id}`
+                })
+            });         
+  });          
+</script>
 </body>
 </html>
