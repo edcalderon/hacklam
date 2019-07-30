@@ -60,14 +60,40 @@
   <!-- End of Page Wrapper -->
   <!-- Footer -->
 
+ <!-- sample modal content -->
+
+  <div id="modal-delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="modal-title">Modal Content is Responsive</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              </div>
+              <div class="modal-body">
+                  <form>
+                      <div class="form-group">
+                          <label for="recipient-name" class="control-label">Esta seguro que desea eliminar el articulo?</label>      
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                  <button id="btn-eliminar" type="button" class="btn btn-danger waves-effect waves-light">Save changes</button>
+              </div>
+          </div>
+      </div>
+  </div>
+<!-- /.modal -->
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
   <script>  
 
-  $(function(){       
+  $(function(){    
+      var id;     
             $(".fa-pencil").on('click', function(){
-              var id = $(this).data("id")
+              id = $(this).data("id")
               $.ajax({
                   method: "GET",
                   url: `/dashboardeditararticulo?editar=${id}`
@@ -75,10 +101,14 @@
                 .done(function() {
                     window.location = `/dashboardeditararticulo?editar=${id}`
                 })
-              });    
+            });    
             $(".fa-trash").on('click', function(){ 
-              var id = $(this).data("id")  
-              $.ajax({
+              id = $(this).data("id") 
+              $("#modal-delete").modal("show")
+            })
+            $("#btn-eliminar").on('click', function(){ 
+              $("#modal-delete").modal("hide")
+                  $.ajax({
                   method: "GET",
                   url: `/deleteproduct?id=${id}`
                   })
@@ -86,8 +116,8 @@
                       $(`#${id}`).remove()
                       toastr.success(`productos: ${e.nombre} borrado correctamente`);  
                   })
-              });                    
-  });
+            });  
+});
 
  
 
