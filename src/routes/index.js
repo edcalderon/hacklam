@@ -333,16 +333,16 @@ app.post('/deleteproduct', (req, res) => {
 	});
 });
 
-app.get('/dashboardadmin', (req, res) =>{
-	Product.find({}, (err,result1)=>{
-		if(err){
+app.get('/dashboardadmin', (req, res) => {
+	Product.find({}, (err, result1) => {
+		if (err) {
 			console.log(err)
-		}	
-		User.find({}, (err,result2)=>{
-			if(err){
+		}
+		User.find({}, (err, result2) => {
+			if (err) {
 				console.log(err)
 			}
-			res.render ('dashboardadmin',{
+			res.render('dashboardadmin', {
 				listar: req.query.listar,
 				listararticulos: req.query.listararticulos,
 				registrar: req.query.registrar,
@@ -350,8 +350,8 @@ app.get('/dashboardadmin', (req, res) =>{
 				articulos: result1
 			})
 		});
-	});		
-});	
+	});
+});
 
 app.get('/dashboardgerente', (req, res) => {
 	User.find({ sede: req.session.sede }, (err, result) => {
@@ -374,30 +374,30 @@ app.get('/dashboardadmintable', (req, res) => {
 	});
 });
 
-app.post('/dashboardadmin', upload.single('imagenProducto'), (req, res) =>{
-	if(req.query.listar){
-		User.findOne({cc: req.body.busqueda},(err,results)=>{
-			if (err){
+app.post('/dashboardadmin', upload.single('imagenProducto'), (req, res) => {
+	if (req.query.listar) {
+		User.findOne({ cc: req.body.busqueda }, (err, results) => {
+			if (err) {
 				return console.log(err)
 			}
-			
-			if(results){
+
+			if (results) {
 				req.session.usuario = results
-				res.render ('dashboardupdateuser',{
+				res.render('dashboardupdateuser', {
 					firstnameUser: results.firstname,
 					lastnameUser: results.lastname,
 					phoneUser: results.phone,
 					rollUser: results.roll,
 					ccUser: results.cc,
-					emailUser: results.email	
+					emailUser: results.email
 				})
 			}
 			else {
 				res.render('dashboardadmin')
-			}	
-		})	
+			}
+		})
 	}
-	if(req.query.registrar){
+	if (req.query.registrar) {
 		let producto = new Product({
 			nombre: req.body.nombre,
 			categoria: req.body.categoria,
@@ -408,14 +408,14 @@ app.post('/dashboardadmin', upload.single('imagenProducto'), (req, res) =>{
 			descuento: req.body.descuento,
 			imagen: req.file.buffer
 		})
-		producto.save((err,result)=>{
-			if(err){
+		producto.save((err, result) => {
+			if (err) {
 				console.log(err);
 				res.render('dashboardadmin', {
 					resultshow: "Error cargado producto"
 				})
 			}
-			res.render('dashboardadmin',{
+			res.render('dashboardadmin', {
 				resultshow: "Producto cargado correctamente"
 			})
 		})
@@ -562,7 +562,7 @@ app.post('/addstore', (req, res) => {
 });
 
 app.get('/dashboardstoreupdate', (req, res) => {
-	const {sede, roll} = req.session;
+	const { sede, roll } = req.session;
 	if (roll == 'administrador') {
 		Product.find({}, (err, result) => {
 			if (err) {
@@ -591,7 +591,7 @@ app.get('/dashboardstoreupdate', (req, res) => {
 });
 
 app.get('/updatestock', (req, res) => {
-	Product.updateOne({nombre: req.query.nombre}, {$set: {cantidad: req.query.cantidad}}, (err, result) => {
+	Product.updateOne({ nombre: req.query.nombre }, { $set: { cantidad: req.query.cantidad } }, (err, result) => {
 		if (err) return console.log(err);
 		//res.send("<h1>Cantidad actualizada</h1><h2>Vista no terminada</h2><br><a href='/dashboardstoreupdate'><button >volver</button></a>");
 		res.render('dashboarduser');
@@ -610,27 +610,27 @@ app.get('/dashboardstore', (req, res) => {
 	});
 });
 
-app.get('/dashboardproducts', (req, res) =>{
-	Product.find({}, (err,result)=>{
-		if(err){
+app.get('/dashboardproducts', (req, res) => {
+	Product.find({}, (err, result) => {
+		if (err) {
 			console.log(err)
-		}	
-		res.render ('dashboardproducts',{
+		}
+		res.render('dashboardproducts', {
 			productos: result
 		})
 	})
 });
 
-app.get('/dashboardeditararticulo', (req, res) =>{
-	if(req.query.editar){
-		Product.findOne({_id: req.query.editar},(err,result)=>{
+app.get('/dashboardeditararticulo', (req, res) => {
+	if (req.query.editar) {
+		Product.findOne({ _id: req.query.editar }, (err, result) => {
 			console.log(result)
-			if(err){
+			if (err) {
 				console.log(err)
-			}			
-			res.render ('dashboardeditararticulo',{
+			}
+			res.render('dashboardeditararticulo', {
 				editar: true,
-				id:req.query.editar,
+				id: req.query.editar,
 				nombre: result.nombre,
 				codigo: result.codigo,
 				categoria: result.categoria,
@@ -640,58 +640,87 @@ app.get('/dashboardeditararticulo', (req, res) =>{
 				descripcion: result.descripcion,
 				imagen: result.imagen.toString('base64')
 			})
-			
-		});	
+
+		});
 	}
 
 });
 
-app.post('/dashboardeditararticulo', upload.single('imagenProducto') ,(req, res) =>{
+app.post('/dashboardeditararticulo', upload.single('imagenProducto'), (req, res) => {
 
 	var conditions = {};
-	
-	if(req.body.nombre){
-		Object.assign(conditions, {nombre : req.body.nombre})
+
+	if (req.body.nombre) {
+		console.log("Nombre modificado! " + req.body.nombre);
+		Object.assign(conditions, { nombre: req.body.nombre })
 	}
-	if(req.body.categoria){
-		Object.assign(conditions, {categoria: req.body.categoria})
+	if (req.body.categoria) {
+		console.log("Nombre modificado! " + req.body.categoria);
+		Object.assign(conditions, { categoria: req.body.categoria })
 	}
-	if(req.body.cantidad){
-		Object.assign(conditions, {cantidad : req.body.cantidad})
+	if (req.body.cantidad) {
+		console.log("cantidad modificado!" + req.body.cantidad);
+		Object.assign(conditions, { cantidad: req.body.cantidad })
 	}
-	if(req.body.precio){
-		Object.assign(conditions, {precio : req.body.precio})
+	if (req.body.precio) {
+		console.log("precio modificado! " + req.body.precio);
+		Object.assign(conditions, { precio: req.body.precio })
 	}
-	if(req.body.codigo){
-		Object.assign(conditions, {codigo : req.body.codigo})
+	if (req.body.codigo) {
+		console.log("codigo modificado! (" + req.body.codigo + ")");
+		Object.assign(conditions, { codigo: req.body.codigo })
 	}
-	if(req.body.descuento){
-		Object.assign(conditions, {descuento : req.body.descuento})
+	if (req.body.descuento) {
+		console.log("descuento modificado!");
+		Object.assign(conditions, { descuento: req.body.descuento })
 	}
-	if(req.body.descripcion){
-		Object.assign(conditions, {descripcion : req.body.descripcion})
+	if (req.body.descripcion) {
+		console.log("descripcion modificado!");
+		Object.assign(conditions, { descripcion: req.body.descripcion })
 	}
-	if(req.body.imagen){
-		Object.assign(conditions, {imagen : req.file.buffer})
+	if (req.body.imagen) {
+		console.log("imagen modificado!");
+		Object.assign(conditions, { imagen: req.file.buffer })
+	}
+	try {
+		console.log("Comenzando edición");
+		Product.findOneAndUpdate({ codigo: parseInt(req.body.codigo) }, { $set: conditions }, { new: true }, (err, result) => {
+			if (err) {
+				console.log("Con errores");
+				return console.log(err);
+			} else {
+				console.log("Sin errores");
+				res.render('dashboardeditararticulo', {
+					editar: true,
+					nombre: result.nombre,
+					codigo: result.codigo,
+					categoria: result.categoria,
+					cantidad: result.cantidad,
+					precio: result.precio,
+					descuento: result.descuento,
+					descripcion: result.descripcion,
+					imagen: result.imagen.toString('base64'),
+					resultshow: "Producto editado correctamente"
+				})
+			}
+
+		})
+	} catch (error) {
+		res.render('dashboardeditararticulo', {
+			editar: true,
+			nombre: result.nombre,
+			codigo: result.codigo,
+			categoria: result.categoria,
+			cantidad: result.cantidad,
+			precio: result.precio,
+			descuento: result.descuento,
+			descripcion: result.descripcion,
+			imagen: result.imagen.toString('base64'),
+			resultshow: "Producto no ha sido editado"
+		})
+		console.log("No sepudo actualizar, error -> " + error);
 	}
 
-	Product.findOneAndUpdate({codigo : req.body.codigo}, {$set: conditions}, {new:true},(err, result) => {
-		console.log(result.nombre)
-			if (err){
-				 return console.log(err);
-			 }res.render('dashboardeditararticulo', {
-				editar: true,
-				nombre: result.nombre,
-				codigo: result.codigo,
-				categoria: result.categoria,
-				cantidad: result.cantidad,
-				precio: result.precio,
-				descuento: result.descuento,
-				descripcion: result.descripcion,
-				imagen: result.imagen.toString('base64'),
-				resultshow: "Producto editado correctamente"
-			 })
-	})
 });
 
 app.get('/exit', (req, res) => {
