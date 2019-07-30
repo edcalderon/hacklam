@@ -54,10 +54,17 @@
       {{>footerdashboard}}
     </div>
     <!-- End of Content Wrapper -->
+   
+
   </div>
   <!-- End of Page Wrapper -->
   <!-- Footer -->
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
   <script>  
+
   $(function(){       
             $(".fa-pencil").on('click', function(){
               var id = $(this).data("id")
@@ -68,8 +75,22 @@
                 .done(function() {
                     window.location = `/dashboardeditararticulo?editar=${id}`
                 })
-            });         
-  });          
+              });    
+            $(".fa-trash").on('click', function(){ 
+              var id = $(this).data("id")  
+              $.ajax({
+                  method: "GET",
+                  url: `/deleteproduct?id=${id}`
+                  })
+                  .done(function(e) {
+                      $(`#${id}`).remove()
+                      toastr.success(`productos: ${e.nombre} borrado correctamente`);  
+                  })
+              });                    
+  });
+
+ 
+
 </script>
 </body>
 </html>

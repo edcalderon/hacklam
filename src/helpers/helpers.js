@@ -22,7 +22,7 @@ hbs.registerHelper('listarUsuarios', (usuarios) => {
 hbs.registerHelper('listarProductos', (productos) => {
 	let texto = '';
 	productos.forEach((prod) => {
-		texto += `<tr role="row" class="odd">
+		texto += `<tr id="${prod._id}" role="row" class="odd">
 		 <td class="sorting_1">${prod.nombre}</td>
 		 <td>${prod.categoria}</td>
 		 <td>${prod.precio}</td>

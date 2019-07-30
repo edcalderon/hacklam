@@ -333,6 +333,8 @@ app.post('/deleteproduct', (req, res) => {
 	});
 });
 
+
+
 app.get('/dashboardadmin', (req, res) =>{
 	Product.find({}, (err,result1)=>{
 		if(err){
@@ -617,9 +619,22 @@ app.get('/dashboardproducts', (req, res) =>{
 		}	
 		res.render ('dashboardproducts',{
 			productos: result
+			
 		})
 	})
+})	
+app.get('/deleteproduct', (req, res) => {
+	id  = req.query.id
+	console.log(id)
+	Product.findOneAndDelete({ _id: id }, (err,result) => {
+		if (err) {
+			console.log(err);
+		} else {
+            res.json(result)
+		}
+	});
 });
+
 
 app.get('/dashboardeditararticulo', (req, res) =>{
 	if(req.query.editar){
@@ -643,6 +658,7 @@ app.get('/dashboardeditararticulo', (req, res) =>{
 			
 		});	
 	}
+
 
 });
 
