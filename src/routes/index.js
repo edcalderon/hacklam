@@ -248,6 +248,8 @@ app.get('/register', (req, res) => {
 	res.render('register', {});
 });
 
+
+
 app.post('/register', (req, res) => {
 	const user = new User({
 		firstname: req.body.firstName,
@@ -282,6 +284,30 @@ app.post('/register', (req, res) => {
 			registro: req.body.registro,
 			show: "<a href='/login' >Registro exitoso!</a>",
 		});
+	});
+});
+
+app.get('/createclient', (req, res) => {
+	res.render('createclient', {});
+});
+
+app.post('/createclient', (req, res) => {
+	const client = new Client({
+		firstname: req.body.firstName,
+		lastname: req.body.lastName,
+		email: req.body.inputEmail,
+		phone: req.body.cedula,
+		puntos: req.body.puntos,
+	});
+	client.save((err) => {
+		if (err) {
+			console.log(err);
+			res.render('createclient', {
+				registro: req.body.registro,
+				show: 'Upss! el cliente  ya existe',
+			});
+		}
+		
 	});
 });
 
