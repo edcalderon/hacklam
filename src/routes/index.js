@@ -25,6 +25,7 @@ app.set('view engine', 'hbs');// Le configuramos el motor de templates o de vist
 
 // Models mongodb
 const User = require('./../models/user');
+const Client = require('./../models/client');
 const Product = require('../models/product');
 const Store = require('./../models/store');
 
@@ -807,6 +808,29 @@ app.get('/dashboardteacher', (req, res) => {
 
 app.get('*', (req, res) => {
 	res.render('error', {});
+});
+
+app.post('/createClient', (req, res) => {
+	const client = new Client({
+		firstname: req.body.firstName,
+		lastname: req.body.lastName,
+		email: req.body.inputEmail,
+		cc: req.body.cedula,
+		score: 0,
+	});
+	client.save((err) => {
+		if (err) {
+			console.log(err);
+			res.render('createClient', {
+				registro: req.body.registro,
+				show: 'Upss! el cliente con ese email o cedula ya existe',
+			});
+		}
+		res.render('createClient', {
+			registro: req.body.registro,
+			show: "<a href='/createClient'>Registro exitoso!</a>",
+		});
+	});
 });
 
 module.exports = app;
