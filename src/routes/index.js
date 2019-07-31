@@ -335,26 +335,24 @@ app.post('/deleteproduct', (req, res) => {
 
 app.get('/shopingcart', (req, res) => {
 	id = req.query.id
-	if(req.session.shopcart){
-		req.session.shopingcart.push(id)
-	}else{
-		req.session.shopingcart = []
-		req.session.shopingcart.push(id)
-	}
 	Product.findOne({ _id: id }, (err, product) => {
 		if (err) {
 			console.log(err);
+		}
+		if(req.session.shopcart){
+			req.session.shopingcart.push(product)
+		}else{
+			req.session.shopingcart = []
+			req.session.shopingcart.push(product)
 		}
 		res.json(product)
     })		
 });
 app.get('/checkout', (req, res) => {
-    if(req.session.shopingcart){
-		console.log("hay")
-	}
 	res.render('dashboardadmin' ,{
 		checkout: true,
-	})	
+		productos: req.session.shopingcart
+	})
 });
 
 

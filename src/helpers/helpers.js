@@ -4,6 +4,7 @@ const hbs = require('hbs');
 hbs.registerHelper('listarArticulos', (articulos) => {		
 	texto = ""
 	articulos.forEach ( art => {
+	
 	texto =  texto + `
 	<div class="col-lg-3 col-md-6">
                         <div class="card">
@@ -30,6 +31,30 @@ hbs.registerHelper('listarArticulos', (articulos) => {
                     </div>
 	
 `;
+
+	});
+	return texto;
+	
+});
+
+hbs.registerHelper('listarProductosCart', (productos) => {		
+	texto = ""
+	productos.forEach ( art => {
+	texto =  texto + `
+	<tr>
+		<td width="150"><img src="data:img/jpeg;base64,${art.imagen.toString('base64')}" alt="iMac" width="80"></td>
+		<td width="550">
+			<h5 class="font-500">${art.nombre}</h5>
+			<p>${art.descripcion}</p>
+		</td>
+		<td>$${art.precio}</td>
+		<td width="70">
+			<input type="text" class="form-control" placeholder="1">
+		</td>
+		<td width="150" align="center" class="font-500">$${art.precio}</td>
+		<td align="center"><a href="javascript:void(0)" class="text-inverse" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash text-dark"></i></a></td>
+	</tr>
+	`;
 
 	});
 	return texto;
