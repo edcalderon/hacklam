@@ -25,6 +25,7 @@ app.set('view engine', 'hbs');// Le configuramos el motor de templates o de vist
 
 // Models mongodb
 const User = require('./../models/user');
+const Client = require('./../models/client');
 const Product = require('../models/product');
 const Store = require('./../models/store');
 
@@ -248,6 +249,8 @@ app.get('/register', (req, res) => {
 	res.render('register', {});
 });
 
+
+
 app.post('/register', (req, res) => {
 	const user = new User({
 		firstname: req.body.firstName,
@@ -283,6 +286,10 @@ app.post('/register', (req, res) => {
 			show: "<a href='/login' >Registro exitoso!</a>",
 		});
 	});
+});
+
+app.get('/createclient', (req, res) => {
+	res.render('createclient', {});
 });
 
 app.get('/createproduct', (req, res) => {
@@ -614,10 +621,8 @@ app.get('/dashboardstoreupdate', (req, res) => {
 });
 
 app.get('/updatestock', (req, res) => {
-
 	const { nombre, sede, cantidad } = req.query;
 	Product.find({ nombre: nombre }, (err, result) => {
-
 		if (err) return console.log(err);
 		test = result[0].cantidad;
 		test[sede] += parseInt(cantidad);
@@ -805,6 +810,29 @@ app.get('/dashboardteacher', (req, res) => {
 
 app.get('*', (req, res) => {
 	res.render('error', {});
+});
+
+app.post('/createclient', (req, res) => {
+	const client = new Client({
+		firstname: req.body.firstName,
+		lastname: req.body.lastName,
+		email: req.body.inputEmail,
+		cc: req.body.cedula,
+		score: 0,
+	});
+	client.save((err) => {
+		if (err) {
+			console.log(err);
+			res.render('createclient', {
+				registro: req.body.registro,
+				show: 'Upss! el cliente con ese email o cedula ya existe',
+			});
+		}
+		res.render('createclient', {
+			registro: req.body.registro,
+			show: "<a href='/createClient'>Registro exitoso!</a>",
+		});
+	});
 });
 
 module.exports = app;
