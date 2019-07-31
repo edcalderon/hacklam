@@ -333,6 +333,21 @@ app.post('/deleteproduct', (req, res) => {
 	});
 });
 
+app.get('/shopingcart', (req, res) => {
+	id = req.query.id
+	if(req.session.shopcart){
+		req.session.shopingcart.push(id)
+	}else{
+		req.session.shopingcart = []
+		req.session.shopingcart.push(id)
+	}
+	Product.findOne({ _id: id }, (err, product) => {
+		if (err) {
+			console.log(err);
+		}
+		res.json(product)
+    })		
+});
 
 
 app.get('/dashboardadmin', (req, res) =>{
