@@ -348,6 +348,14 @@ app.get('/shopingcart', (req, res) => {
 		res.json(product)
     })		
 });
+app.get('/checkout', (req, res) => {
+    if(req.session.shopingcart){
+		console.log("hay")
+	}
+	res.render('dashboardadmin' ,{
+		checkout: true,
+	})	
+});
 
 
 app.get('/dashboardadmin', (req, res) =>{
