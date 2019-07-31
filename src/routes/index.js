@@ -292,26 +292,6 @@ app.get('/createclient', (req, res) => {
 	res.render('createclient', {});
 });
 
-app.post('/createclient', (req, res) => {
-	const client = new Client({
-		firstname: req.body.firstName,
-		lastname: req.body.lastName,
-		email: req.body.inputEmail,
-		phone: req.body.cedula,
-		puntos: req.body.puntos,
-	});
-	client.save((err) => {
-		if (err) {
-			console.log(err);
-			res.render('createclient', {
-				registro: req.body.registro,
-				show: 'Upss! el cliente  ya existe',
-			});
-		}
-		
-	});
-});
-
 app.get('/createproduct', (req, res) => {
 	res.render('createproduct', {});
 });
@@ -832,7 +812,7 @@ app.get('*', (req, res) => {
 	res.render('error', {});
 });
 
-app.post('/createClient', (req, res) => {
+app.post('/createclient', (req, res) => {
 	const client = new Client({
 		firstname: req.body.firstName,
 		lastname: req.body.lastName,
@@ -843,12 +823,12 @@ app.post('/createClient', (req, res) => {
 	client.save((err) => {
 		if (err) {
 			console.log(err);
-			res.render('createClient', {
+			res.render('createclient', {
 				registro: req.body.registro,
 				show: 'Upss! el cliente con ese email o cedula ya existe',
 			});
 		}
-		res.render('createClient', {
+		res.render('createclient', {
 			registro: req.body.registro,
 			show: "<a href='/createClient'>Registro exitoso!</a>",
 		});
