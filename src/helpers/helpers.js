@@ -1,5 +1,66 @@
 const hbs = require('hbs');
 
+
+hbs.registerHelper('listarArticulos', (articulos) => {		
+	texto = ""
+	articulos.forEach ( art => {
+	
+	texto =  texto + `
+	<div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="el-card-item">
+									<div class="el-card-avatar el-overlay-1"> <img src="data:img/jpeg;base64,${art.imagen.toString('base64')}" alt="user" />
+									<div class="el-overlay">
+										<ul class="list-style-none el-info">
+											<li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="#"><i class="icon-magnifier"></i></a></li>
+											<li class="el-item"><a class="btn default btn-outline el-link" href="javascript:void(0);"><i class="icon-link"></i></a></li>
+										</ul>
+									</div>
+									</div>
+										<div class="d-flex no-block align-items-center">
+											<div class="m-l-15">
+												<h4 class="m-b-0">${art.nombre}</h4>
+												<span class="text-muted">${art.descripcion}</span>
+											</div>
+											<div class="ml-auto m-r-15">
+													<button type="button" class="btn btn-dark btn-circle">$${art.precio}</button>
+											</div>
+								       </div>
+                                 </div>
+                        </div>
+                    </div>
+	
+`;
+
+	});
+	return texto;
+	
+});
+
+hbs.registerHelper('listarProductosCart', (productos) => {		
+	texto = ""
+	productos.forEach ( art => {
+	texto =  texto + `
+	<tr>
+		<td width="150"><img src="data:img/jpeg;base64,${art.imagen.toString('base64')}" alt="iMac" width="80"></td>
+		<td width="550">
+			<h5 class="font-500">${art.nombre}</h5>
+			<p>${art.descripcion}</p>
+		</td>
+		<td>$${art.precio}</td>
+		<td width="70">
+			<input type="text" class="form-control" placeholder="1">
+		</td>
+		<td width="150" align="center" class="font-500">$${art.precio}</td>
+		<td align="center"><a href="javascript:void(0)" class="text-inverse" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash text-dark"></i></a></td>
+	</tr>
+	`;
+
+	});
+	return texto;
+	
+});
+
 hbs.registerHelper('listarUsuarios', (usuarios) => {
 	let texto = '';
 	usuarios.forEach((usr) => {
@@ -22,7 +83,7 @@ hbs.registerHelper('listarUsuarios', (usuarios) => {
 hbs.registerHelper('listarProductos', (productos) => {
 	let texto = '';
 	productos.forEach((prod) => {
-		texto += `<tr role="row" class="odd">
+		texto += `<tr id="${prod._id}" role="row" class="odd">
 		 <td class="sorting_1">${prod.nombre}</td>
 		 <td>${prod.categoria}</td>
 		 <td>${prod.precio}</td>
@@ -30,6 +91,7 @@ hbs.registerHelper('listarProductos', (productos) => {
 		   <div class="inblock" >
 			 <i id="edit" data-id="${prod._id}" class="fa fa-pencil" ></i>
 			 <i id="delete" data-id="${prod._id}" class="fa fa-trash"></i>
+			 <i id="shop" data-id="${prod.id}" class="fa fa-cart-plus cartshop"></i>
 			 <input type="checkbox" data-id="${prod._id}" class="check"/> 
 		   </div>
 		 </td>
