@@ -29,9 +29,6 @@ hbs.registerHelper('listarArticulos', (articulos) => {
                         </div>
                     </div>
 	
-	
-	
-	
 `;
 
 	});
@@ -69,6 +66,7 @@ hbs.registerHelper('listarProductos', (productos) => {
 		   <div class="inblock" >
 			 <i id="edit" data-id="${prod._id}" class="fa fa-pencil" ></i>
 			 <i id="delete" data-id="${prod._id}" class="fa fa-trash"></i>
+			 <i id="shop" data-id="${prod.id}" class="fa fa-cart-plus cartshop"></i>
 			 <input type="checkbox" data-id="${prod._id}" class="check"/> 
 		   </div>
 		 </td>
