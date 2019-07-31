@@ -339,26 +339,26 @@ app.get('/shopingcart', (req, res) => {
 		if (err) {
 			console.log(err);
 		}
-		if(req.session.shopcart){
+		if (req.session.shopcart) {
 			req.session.shopingcart.push(product)
-		}else{
+		} else {
 			req.session.shopingcart = []
 			req.session.shopingcart.push(product)
 		}
 		res.json(product)
-    })		
+	})
 });
 app.get('/checkout', (req, res) => {
-	res.render('dashboardadmin' ,{
+	res.render('dashboardadmin', {
 		checkout: true,
 		productos: req.session.shopingcart
 	})
 });
 
 
-app.get('/dashboardadmin', (req, res) =>{
-	Product.find({}, (err,result1)=>{
-		if(err){
+app.get('/dashboardadmin', (req, res) => {
+	Product.find({}, (err, result1) => {
+		if (err) {
 			console.log(err)
 		}
 		User.find({}, (err, result2) => {
@@ -614,18 +614,16 @@ app.get('/dashboardstoreupdate', (req, res) => {
 });
 
 app.get('/updatestock', (req, res) => {
-<<<<<<< HEAD
-	const {nombre, sede, cantidad} = req.query;
-	Product.find({nombre: nombre}, (err, result) => {
-=======
-	Product.updateOne({ nombre: req.query.nombre }, { $set: { cantidad: req.query.cantidad } }, (err, result) => {
->>>>>>> d3a83d9123439c4ac7c502e157f64624ee35aff1
+
+	const { nombre, sede, cantidad } = req.query;
+	Product.find({ nombre: nombre }, (err, result) => {
+
 		if (err) return console.log(err);
 		test = result[0].cantidad;
 		test[sede] += parseInt(cantidad);
-		Product.updateOne({nombre: nombre}, {$set: {cantidad: test}}, (err, result) => {
+		Product.updateOne({ nombre: nombre }, { $set: { cantidad: test } }, (err, result) => {
 			if (err) return console.log(err);
-			const {sede, roll} = req.session;
+			const { sede, roll } = req.session;
 			if (roll == 'administrador') {
 				Product.find({}, (err, result) => {
 					if (err) {
@@ -674,26 +672,26 @@ app.get('/dashboardproducts', (req, res) => {
 		}
 		res.render('dashboardproducts', {
 			productos: result
-			
+
 		})
 	})
-})	
+})
 app.get('/deleteproduct', (req, res) => {
-	id  = req.query.id
+	id = req.query.id
 	console.log(id)
-	Product.findOneAndDelete({ _id: id }, (err,result) => {
+	Product.findOneAndDelete({ _id: id }, (err, result) => {
 		if (err) {
 			console.log(err);
 		} else {
-            res.json(result)
+			res.json(result)
 		}
 	});
 });
 
 
-app.get('/dashboardeditararticulo', (req, res) =>{
-	if(req.query.editar){
-		Product.findOne({_id: req.query.editar},(err,result)=>{
+app.get('/dashboardeditararticulo', (req, res) => {
+	if (req.query.editar) {
+		Product.findOne({ _id: req.query.editar }, (err, result) => {
 			console.log(result)
 			if (err) {
 				console.log(err)
