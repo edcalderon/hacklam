@@ -20,8 +20,7 @@ const productSchema = new Schema({
 		trim: true,
 	},
 	cantidad: {
-		type: Number,
-		trim: true,
+		type: Object,
 	},
 	precio: {
 		type: Number,

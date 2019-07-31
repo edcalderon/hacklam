@@ -591,10 +591,40 @@ app.get('/dashboardstoreupdate', (req, res) => {
 });
 
 app.get('/updatestock', (req, res) => {
-	Product.updateOne({nombre: req.query.nombre}, {$set: {cantidad: req.query.cantidad}}, (err, result) => {
+	const {nombre, sede, cantidad} = req.query;
+	Product.find({nombre: nombre}, (err, result) => {
 		if (err) return console.log(err);
-		//res.send("<h1>Cantidad actualizada</h1><h2>Vista no terminada</h2><br><a href='/dashboardstoreupdate'><button >volver</button></a>");
-		res.render('dashboarduser');
+		test = result[0].cantidad;
+		test[sede] += parseInt(cantidad);
+		Product.updateOne({nombre: nombre}, {$set: {cantidad: test}}, (err, result) => {
+			if (err) return console.log(err);
+			const {sede, roll} = req.session;
+			if (roll == 'administrador') {
+				Product.find({}, (err, result) => {
+					if (err) {
+						return console.log(err);
+					}
+					res.render('dashboardstoreupdate', {
+						productos: result,
+					});
+				});
+			} else {
+				Product.find({ sede }, (err, result) => {
+					if (err) {
+						console.log(err);
+					}
+					let filtro = result.filter(obj => {
+						if ('sede' in obj) return obj.sede.includes(sede);
+					});
+					filtro.forEach(obj => {
+						obj.sede = [sede];
+					})
+					res.render('dashboardstoreupdate', {
+						productos: filtro,
+					});
+				});
+			}
+		});
 	});
 });
 
