@@ -7,11 +7,11 @@ const productSchema = new Schema({
 		type: String,
 		required: true,
 		trim: true,
-		lowercase: true
+		lowercase: true,
 	},
 	codigo: {
 		type: Number,
-		unique: true
+		unique: true,
 	},
 	categoria: {
 		type: String,
@@ -27,8 +27,8 @@ const productSchema = new Schema({
 		required: true,
 	},
 	descuento: {
-		type: Number
-	  },
+		type: Number,
+	},
 	descripcion: {
 		type: String,
 		required: true,
@@ -39,7 +39,7 @@ const productSchema = new Schema({
 	},
 	sede: {
 		type: Array,
-	}
+	},
 });
 
 // create mongoose model

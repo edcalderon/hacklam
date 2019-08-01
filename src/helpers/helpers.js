@@ -1,21 +1,14 @@
 const hbs = require('hbs');
 
 
-hbs.registerHelper('listarArticulos', (articulos) => {		
-	texto = ""
-	articulos.forEach ( art => {
-	
-	texto =  texto + `
+hbs.registerHelper('listarArticulos', (articulos) => {
+	let texto = '';
+	articulos.forEach((art) => {
+		texto += `
 	<div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
 									<div class="el-card-avatar el-overlay-1"> <img src="data:img/jpeg;base64,${art.imagen.toString('base64')}" alt="user" />
-									<div class="el-overlay">
-										<ul class="list-style-none el-info">
-											<li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="#"><i class="icon-magnifier"></i></a></li>
-											<li class="el-item"><a class="btn default btn-outline el-link" href="javascript:void(0);"><i class="icon-link"></i></a></li>
-										</ul>
-									</div>
 									</div>
 										<div class="d-flex no-block align-items-center">
 											<div class="m-l-15">
@@ -31,16 +24,14 @@ hbs.registerHelper('listarArticulos', (articulos) => {
                     </div>
 	
 `;
-
 	});
 	return texto;
-	
 });
 
-hbs.registerHelper('listarProductosCart', (productos) => {		
-	texto = ""
-	productos.forEach ( art => {
-	texto =  texto + `
+hbs.registerHelper('listarProductosCart', (productos) => {
+	let texto = '';
+	productos.forEach((art) => {
+		texto += `
 	<tr>
 		<td width="150"><img src="data:img/jpeg;base64,${art.imagen.toString('base64')}" alt="iMac" width="80"></td>
 		<td width="550">
@@ -55,10 +46,8 @@ hbs.registerHelper('listarProductosCart', (productos) => {
 		<td align="center"><a href="javascript:void(0)" class="text-inverse" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash text-dark"></i></a></td>
 	</tr>
 	`;
-
 	});
 	return texto;
-	
 });
 
 hbs.registerHelper('listarUsuarios', (usuarios) => {
@@ -112,10 +101,10 @@ hbs.registerHelper('listarProductosTienda', (productos) => {
 	return texto;
 });
 
-hbs.registerHelper('listProdUp', productos => {
+hbs.registerHelper('listProdUp', (productos) => {
 	let contenido = '';
-	productos.forEach(prod => {
-		prod.sede.forEach(city => {
+	productos.forEach((prod) => {
+		prod.sede.forEach((city) => {
 			contenido += `
 				<form action="/updatestock" method="get>
 					<tr role="row" class="odd">
@@ -143,8 +132,8 @@ hbs.registerHelper('listProdUp', productos => {
 hbs.registerHelper('listarProductosTiendaUpdate', (productos) => {
 	let texto = '';
 	productos.forEach((prod) => {
-		prod.sede.forEach(city => {
-		texto += `<form action="/updatestock" method="GET">
+		prod.sede.forEach((city) => {
+			texto += `<form action="/updatestock" method="GET">
 		 <tr role="row" class="odd">
 		 <td class="sorting_1">${prod.nombre}</td>
 		 <td>${prod.codigo}</td>
@@ -160,7 +149,8 @@ hbs.registerHelper('listarProductosTiendaUpdate', (productos) => {
 		 </td>
 		 <td>${city}</td>
 		</tr></form>`;
-	})});
+		});
+	});
 	return texto;
 });
 
