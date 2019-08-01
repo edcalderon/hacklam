@@ -27,7 +27,6 @@ app.set('view engine', 'hbs');// Le configuramos el motor de templates o de vist
 const User = require('./../models/user');
 const Client = require('./../models/client');
 const Product = require('../models/product');
-const Store = require('./../models/store');
 
 // Session
 app.use(session({
@@ -553,40 +552,6 @@ app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
 	}
 });
 
-app.get('/addstore', (req, res) => {
-	const { nombre } = req.query;
-	Product.findOne({ nombre }, (err, product) => {
-		if (err) {
-			console.log(err);
-		} else if (product) {
-			res.render('addstore', product);
-		} else {
-			console.log(product);
-		}
-	});
-});
-
-app.post('/addstore', (req, res) => {
-	const { id, cantidad, nombre } = req.body;
-	const { sede } = req.session;
-	const store = new Store({
-		cantidad, nombre, product: id, sede,
-	});
-	console.log(req.body);
-	store.save((err, element) => {
-		if (err) {
-			console.log(err);
-		} else if (element) {
-			res.render('addstore', {
-				registro: true,
-				show: "<a href='/dashboardproducts'>Agreagado a la tienda exitosamente!</a>",
-			});
-		} else {
-			console.log(element);
-		}
-	});
-});
-
 app.get('/dashboardstoreupdate', (req, res) => {
 	const { sede, roll } = req.session;
 	if (roll === 'administrador') {
@@ -651,18 +616,6 @@ app.get('/updatestock', (req, res) => {
 					});
 				});
 			}
-		});
-	});
-});
-
-app.get('/dashboardstore', (req, res) => {
-	const { sede } = req.session;
-	Store.find({ sede }, (err, result) => {
-		if (err) {
-			console.log(err);
-		}
-		res.render('dashboardstore', {
-			productos: result,
 		});
 	});
 });
