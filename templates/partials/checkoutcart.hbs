@@ -27,6 +27,15 @@
         var totalBruto = document.getElementById("totalBruto");
         totalBruto.innerText = totalNeto;
     }
+
+    const devuelta = function (id) {
+        const totalBruto = document.getElementById("totalBruto");
+        const efectivo = document.getElementById("efectivo");
+        const cambio = document.getElementById("cambio");
+        const total = parseInt(efectivo.value) - parseInt(totalBruto.innerText);
+        
+        cambio.innerText = total;
+    }
 </script>
 <div class="container-fluid">
     <!-- ============================================================== -->
@@ -91,11 +100,11 @@
                                     <form>
                                         <div class="form-group">
                                             <label for="recipient-name" class="col-form-label">Efectivo Recibido:</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <input type="text" onchange="devuelta();"  class="form-control" id="efectivo">
                                         </div>
                                         <div class="form-group">
                                             <label for="message-text" class="col-form-label">Cambio a entregar:</label>
-                                            <textarea class="form-control" id="message-text"></textarea>
+                                            <textarea class="form-control" id="cambio"></textarea>
                                         </div>
                                     </form>
                                 </div>

@@ -43,7 +43,7 @@ hbs.registerHelper('section', function (name, options) {
 });
 
 hbs.registerHelper('listarProductosCart', (productos, cant) => {
-	let texto = ``;
+	let texto = '';
 	let i = 0;
 	productos.forEach((art) => {
 		texto += `
@@ -53,14 +53,15 @@ hbs.registerHelper('listarProductosCart', (productos, cant) => {
 			<h5 class="font-500">${art.nombre}</h5>
 			<p>${art.descripcion}</p>
 		</td>
-		<td id="precio-` + (i) + `">$${art.precio}</td>
-		<td width="70" onclick="total(` + (i) + `);">
-			<input type="text" id="input-` + (i) + `" onchange="total(` + (i) + `);" class="form-control" placeholder="1" value="${cant}">
+		<td id="precio-${i}">$${art.precio}</td>
+		<td width="70" onclick="total(${i});">
+			<input type="text" id="input-${i}" onchange="total(${i});" class="form-control" placeholder="1" value="${cant}">
 		</td>
-		<td width="150" align="center" id="total-` + (i++) + `" class="font-500 totalItem">${art.precio * cant}</td>
+		<td width="150" align="center" id="total-${i}" class="font-500 totalItem">${art.precio}</td>
 		<td align="center"><a href="javascript:void(0)" class="text-inverse" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash text-dark"></i></a></td>
 	</tr>
 	`;
+		i += 1;
 	});
 	return texto;
 });
