@@ -2,8 +2,11 @@ const hbs = require('hbs');
 
 
 hbs.registerHelper('sum', (productos) => {
-	const total = productos.reduce((acum, producto) => acum + producto.precio, 0);
-	return total;
+	if (productos) {
+		const total = productos.reduce((acum, producto) => acum + (producto.precio), 0);
+		return total;
+	}
+	return 0;
 });
 
 hbs.registerHelper('listarArticulos', (articulos) => {
