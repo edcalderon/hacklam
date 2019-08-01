@@ -345,7 +345,10 @@ app.get('/shopingcart', (req, res) => {
 			console.log(err);
 		}
 		if (req.session.shopingcart) {
-			req.session.shopingcart.push(product);
+			const result = req.session.shopingcart.filter(producto => producto._id === id);
+			if (result.length === 0) {
+				req.session.shopingcart.push(product);
+			}
 		} else {
 			req.session.shopingcart = [];
 			req.session.shopingcart.push(product);
