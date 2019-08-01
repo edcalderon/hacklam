@@ -614,12 +614,8 @@ app.get('/dashboardstoreupdate', (req, res) => {
 });
 
 app.get('/updatestock', (req, res) => {
-<<<<<<< HEAD
 	const {nombre, sede, cantidad} = req.query;
 	Product.find({nombre: nombre}, (err, result) => {
-=======
-	Product.updateOne({ nombre: req.query.nombre }, { $set: { cantidad: req.query.cantidad } }, (err, result) => {
->>>>>>> d3a83d9123439c4ac7c502e157f64624ee35aff1
 		if (err) return console.log(err);
 		test = result[0].cantidad;
 		test[sede] += parseInt(cantidad);
