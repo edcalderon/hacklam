@@ -1,3 +1,33 @@
+{{#section 'script'}}
+<script type="application/javascript">
+
+
+    alert("Funciono!");
+
+    $(function () {
+        alert("Hello World!");
+    });
+</script> {{/section}}
+
+<script>
+    var total = function (id) {
+        console.log("Prueba-" + id);
+        var precio = document.getElementById("precio-" + id);
+        var input = document.getElementById("input-" + id);
+        var tt = document.getElementById("total-" + id);
+        console.log(precio);
+        console.log(input);
+        console.log(tt);
+        tt.innerText = parseInt(precio.innerText.substr(1)) * parseInt(input.value);
+        var items = document.getElementsByClassName("totalItem");
+        var totalNeto = 0;
+        for (var i = 0; i < items.length; i++) {
+            totalNeto += parseInt(items[i].innerText);
+        }
+        var totalBruto = document.getElementById("totalBruto");
+        totalBruto.innerText = totalNeto;
+    }
+</script>
 <div class="container-fluid">
     <!-- ============================================================== -->
     <!-- Start Page Content -->
@@ -23,17 +53,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#if productos}}
-                                {{{listarProductosCart productos}}}
-                                {{else}}
-                                "NO TIENES PRODUCTOS EN TU CARRO VE Y COMPRA!"
-                                {{/if}}
+                                {{#if productos}} {{{listarProductosCart productos cant}}} {{else}} "NO TIENES PRODUCTOS EN TU CARRO VE Y COMPRA!" {{/if}}
                             </tbody>
                         </table>
                         <hr>
                         <div class="d-flex no-block align-items-center">
-                            <button class="btn btn-dark btn-outline"
-                                onclick="window.location.href='/dashboardproducts'"><i class="fas fa-arrow-left"></i>
+                            <button class="btn btn-dark btn-outline" onclick="window.location.href='/dashboardproducts'"><i
+                                    class="fas fa-arrow-left"></i>
                                 Continua Comprando</button>
                         </div>
                     </div>
@@ -47,15 +73,12 @@
                     <h5 class="card-title">Resumen de Compras</h5>
                     <hr>
                     <small>Total Price</small>
-                    <h2>${{{sum productos}}}</h2>
+                    <h2 id="totalBruto">${{{sum productos}}}</h2>
                     <hr>
                     <h5>Paga con: </h5>
-                    <button id='Efectivo-button' class="btn btn-primary" type='button' data-toggle="modal"
-                        data-target="modal-TotalCost">Efectivo</button>
-                    {{!-- <button class="btn btn-secondary btn-outline">Credito</button> --}}
-                    {{!-- modal --}}
-                    <div class="modal fade" id="modal-TotalCost" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <button id='Efectivo-button' class="btn btn-primary" type='button' data-toggle="modal" data-target="modal-TotalCost">Efectivo</button>
+                    {{!-- <button class="btn btn-secondary btn-outline">Credito</button> --}} {{!-- modal --}}
+                    <div class="modal fade" id="modal-TotalCost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -91,12 +114,11 @@
                                 $("#modal-TotalCost").modal();
                             });
                         });
-                    </script>
-                    {{!-- cierra modal --}}
+                    </script> {{!-- cierra modal --}}
 
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
                             Tarjeta
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -110,8 +132,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Información de Soporte</h5>
                     <hr>
-                    <h4><i class="ti-mobile"></i>Tel: 3255566</h4> <small>Por favor contactanos si tienen preguntas.
-                        Estamos disponibles 24h.</small>
+                    <h4><i class="ti-mobile"></i>Tel: 3255566</h4> <small>Por favor contactanos si tienen preguntas. Estamos
+                        disponibles 24h.</small>
                 </div>
             </div>
         </div>

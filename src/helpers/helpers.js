@@ -36,8 +36,15 @@ hbs.registerHelper('listarArticulos', (articulos) => {
 	return texto;
 });
 
-hbs.registerHelper('listarProductosCart', (productos) => {
-	let texto = '';
+hbs.registerHelper('section', function (name, options) {
+	if (!this._sections) this._sections = {};
+	this._sections[name] = options.fn(this);
+	return null;
+});
+
+hbs.registerHelper('listarProductosCart', (productos, cant) => {
+	let texto = ``;
+	let i = 0;
 	productos.forEach((art) => {
 		texto += `
 	<tr>
@@ -46,11 +53,11 @@ hbs.registerHelper('listarProductosCart', (productos) => {
 			<h5 class="font-500">${art.nombre}</h5>
 			<p>${art.descripcion}</p>
 		</td>
-		<td>$${art.precio}</td>
-		<td width="70">
-			<input type="text" class="form-control" placeholder="1">
+		<td id="precio-` + (i) + `">$${art.precio}</td>
+		<td width="70" onclick="total(` + (i) + `);">
+			<input type="text" id="input-` + (i) + `" onchange="total(` + (i) + `);" class="form-control" placeholder="1" value="${cant}">
 		</td>
-		<td width="150" align="center" class="font-500">$${art.precio}</td>
+		<td width="150" align="center" id="total-` + (i++) + `" class="font-500 totalItem">${art.precio * cant}</td>
 		<td align="center"><a href="javascript:void(0)" class="text-inverse" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash text-dark"></i></a></td>
 	</tr>
 	`;
@@ -208,7 +215,7 @@ hbs.registerHelper('inscription', (listado) => {
 					<tbody>`;
 	listado.forEach((materia) => {
 		texto +=
-					`<tr>
+			`<tr>
 					<td> ${materia.name} </td>
 					<td> ${materia.value} </td>
 					<td> ${materia.intensity}</td>
@@ -246,7 +253,7 @@ hbs.registerHelper('closeCourse', (courses) => {
 		const myJSON = JSON.stringify(course.students);
 
 		texto +=
-					`<tr>
+			`<tr>
 					<td> ${course.name} </td>
 					<td> ${course.value} </td>
 					<td> ${course.intensity}</td>
@@ -292,7 +299,7 @@ hbs.registerHelper('cancelIncription', (miscursos) => {
 					<tbody>`;
 	miscursos.forEach((materia) => {
 		texto +=
-					`<tr>
+			`<tr>
 					<td> ${materia.name} </td>
 					<td> ${materia.value} </td>
 					<td> ${materia.intensity}</td>
@@ -318,7 +325,7 @@ hbs.registerHelper('modifyUser', (misusuarios) => {
 					<tbody>`;
 	misusuarios.forEach((usuario) => {
 		texto +=
-					`<tr>
+			`<tr>
 					<td> ${usuario.firstname} </td>
 					<td> ${usuario.lastname} </td>
 					<td> ${usuario.cc}</td>
@@ -337,7 +344,7 @@ hbs.registerHelper('assignTeacher', (teachers) => {
 					<option selected="">Elija el profesor</option>`;
 	teachers.forEach((teacher) => {
 		texto +=
-					`<option value="${teacher.cc}">${teacher.firstname}</option>`;
+			`<option value="${teacher.cc}">${teacher.firstname}</option>`;
 	});
 	texto += '</select></form>';
 	return texto;
@@ -365,7 +372,7 @@ hbs.registerHelper('infoTeachers', (materias) => {
 			console.log(students);
 
 			texto +=
-						`<tr>
+				`<tr>
 						<td> ${curso.name} </td>
 						<td> ${curso.value} </td>
 						<td> ${curso.intensity}</td>

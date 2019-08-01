@@ -98,3 +98,8 @@ mongoose.connect(URLDB, { useNewUrlParser: true }, (err) => {
 server.listen(PORT, () => {
 	console.log(`Escuchando en el puerto ${PORT}`);
 });
+
+
+function total(id) {
+	console.log("editar input-" + id);
+}

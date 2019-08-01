@@ -361,8 +361,16 @@ app.get('/checkout', (req, res) => {
 	res.render('dashboardadmin', {
 		checkout: true,
 		productos: req.session.shopingcart,
+		cant: 1,
+		helpers: {
+			foo: function (d) { return 'foo.' + d; }
+		}
 	});
 });
+
+function total(id) {
+	console.log("editar input-" + id);
+}
 
 
 app.get('/dashboardadmin', (req, res) => {
@@ -587,8 +595,8 @@ app.get('/dashboardstoreupdate', (req, res) => {
 });
 
 app.get('/updatestock', (req, res) => {
-	const {nombre, sede, cantidad} = req.query;
-	Product.find({nombre: nombre}, (err, result) => {
+	const { nombre, sede, cantidad } = req.query;
+	Product.find({ nombre: nombre }, (err, result) => {
 		if (err) return console.log(err);
 		const test = result[0].cantidad;
 		test[sede] += parseInt(cantidad, 10);
