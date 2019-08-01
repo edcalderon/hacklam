@@ -344,8 +344,11 @@ app.get('/shopingcart', (req, res) => {
 		if (err) {
 			console.log(err);
 		}
-		if (req.session.shopcart) {
-			req.session.shopingcart.push(product);
+		if (req.session.shopingcart) {
+			const result = req.session.shopingcart.filter(producto => producto._id === id);
+			if (result.length === 0) {
+				req.session.shopingcart.push(product);
+			}
 		} else {
 			req.session.shopingcart = [];
 			req.session.shopingcart.push(product);
@@ -353,6 +356,7 @@ app.get('/shopingcart', (req, res) => {
 		res.json(product);
 	});
 });
+
 app.get('/checkout', (req, res) => {
 	res.render('dashboardadmin', {
 		checkout: true,
