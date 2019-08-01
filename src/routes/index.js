@@ -344,7 +344,7 @@ app.get('/shopingcart', (req, res) => {
 		if (err) {
 			console.log(err);
 		}
-		if (req.session.shopcart) {
+		if (req.session.shopingcart) {
 			req.session.shopingcart.push(product);
 		} else {
 			req.session.shopingcart = [];
@@ -353,6 +353,7 @@ app.get('/shopingcart', (req, res) => {
 		res.json(product);
 	});
 });
+
 app.get('/checkout', (req, res) => {
 	res.render('dashboardadmin', {
 		checkout: true,
