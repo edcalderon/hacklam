@@ -10,7 +10,7 @@ const productSchema = new Schema({
 		lowercase: true,
 	},
 	codigo: {
-		type: Number,
+		type: String,
 		unique: true,
 	},
 	categoria: {

@@ -298,10 +298,18 @@ app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 	const {
 		nombre, categoria, descripcion, precio,
 	} = req.body;
+	var codigo = randomStr(10,'12345abcde')
+	function randomStr(len, arr) { 
+		var ans = ''; 
+		for (var i = len; i > 0; i--) { 
+			ans +=  
+			  arr[Math.floor(Math.random() * arr.length)]; 
+		} 
+		return ans; 
+	} 
 	const product = new Product({
-		nombre, categoria, imagen: req.file.buffer, descripcion, precio,
+		nombre, codigo, categoria, imagen: req.file.buffer, descripcion, precio
 	});
-	console.log(req.body);
 	product.save((err, producto) => {
 		if (err) {
 			console.log(err);
@@ -319,7 +327,6 @@ app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 		}
 	});
 });
-
 app.post('/deleteproduct', (req, res) => {
 	const { id } = req.body;
 	Product.deleteOne({ _id: id }, (err) => {
@@ -717,7 +724,7 @@ app.post('/dashboardeditararticulo', upload.single('imagenProducto'), (req, res)
 	try {
 		console.log('Comenzando edición');
 		Product.findOneAndUpdate(
-			{ codigo: parseInt(req.body.codigo, 10) },
+			{ codigo: req.body.codigo },
 			{ $set: conditions }, { new: true }, (err, result) => {
 				if (err) {
 					console.log('Con errores');
