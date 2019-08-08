@@ -70,10 +70,15 @@ app.use((req, res, next) => {
 			res.locals.rollUser = req.session.rollUser;
 		}
 		// vars change avatar
-		res.locals.avatar = (req.session.avatar) ? req.session.avatar : null;
-		res.locals.administrador = (req.session.administrador) ? true : null;
-		res.locals.gerente = (req.session.gerente) ? true : null;
-		res.locals.bodeguero = (req.session.bodeguero) ? true : null;
+		const {
+			avatar, administrador, gerente, bodeguero, cajero,
+		} = req.session;
+		res.locals.avatar = avatar || null;
+		res.locals.administrador = administrador ? true : null;
+		res.locals.gerente = gerente ? true : null;
+		res.locals.bodeguero = bodeguero ? true : null;
+		res.locals.cajero = cajero ? true : null;
+		res.locals.active = administrador || gerente || bodeguero || cajero;
 	}
 	next();
 });
@@ -101,5 +106,5 @@ server.listen(PORT, () => {
 
 
 function total(id) {
-	console.log("editar input-" + id);
+	console.log(`editar input-${id}`);
 }
