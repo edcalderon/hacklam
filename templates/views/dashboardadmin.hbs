@@ -33,34 +33,34 @@
           <div class="card">
             {{#if listar}}
             <div class="card-body">
-                      <div class="limiter">
-            <div class="container-table100">
-                <div class="wrap-table100">
-                  <div class="row">     
-                    <form action="/dashboardadmin?listar=true" method="post" >	
-                        <div class="form-row">  
-                            <div class="col "><input type="text"   name="busqueda" placeholder="editar por cedula" ></div>    
-                            <div class="col "><button type="submit" class="btn btn-primary"> buscar </button></div>         
-                        </div>                      
-                    </form>
-                 </div>   
-                 <br></br>
-                 {{>usersadmintable}}
+              <div class="limiter">
+                <div class="container-table100">
+                  <div class="wrap-table100">
+                    <div class="row">
+                      <form action="/dashboardadmin?listar=true" method="post">
+                        <div class="form-row">
+                          <div class="col "><input type="text" name="busqueda" placeholder="editar por cedula"></div>
+                          <div class="col "><button type="submit" class="btn btn-primary"> buscar </button></div>
+                        </div>
+                      </form>
+                    </div>
+                    <br></br>
+                    {{>usersadmintable}}
                   </div>
-                </div>    
+                </div>
+              </div>
             </div>
-           </div>
-           {{/if}}
-           {{#if registrar}}
-             {{>registroarticulos}}
-           {{/if}}
-           {{#if listararticulos}}
+            {{/if}}
+            {{#if registrar}}
+            {{>registroarticulos}}
+            {{/if}}
+            {{#if listararticulos}}
             {{>listararticulos}}
-           {{/if}}
-           {{#if checkout}}
+            {{/if}}
+            {{#if checkout}}
             {{>checkoutcart}}
-           {{/if}}
-          </div>  
+            {{/if}}
+          </div>
         </div>
         <!-- /.container-fluid -->
 
@@ -76,4 +76,5 @@
   </div>
   <!-- End of Page Wrapper -->
 </body>
+
 </html>
