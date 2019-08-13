@@ -8,38 +8,38 @@
 							<h5 class="card-title">Información de producto</h5>
 							<hr>
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-12">
 									<div class="form-group">
 										<label class="control-label">Nombre</label>
-										<input type="text" id="nombre" name="nombre" class="form-control" value="{{nombre}}"
-											placeholder="ingrese el nombre del producto"> </div>
+										<input type="text" id="nombre" name="nombre" class="form-control" value="{{nombre}}" placeholder="ingrese el nombre del producto">
+									</div>											
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="control-label">Tipo</label>
-										<select class="form-control" name="categoria" data-placeholder="Choose a Category" tabindex="1"
-											value="{{categoria}}">
+								<div class="col-md-12">
+									<div class="form-group" ><i class="was-validated"></i>
+										<label class="control-label">Categoria</label>
+										<select class="form-control" name="categoria" data-placeholder="Escoge una Categoria" tabindex="1" value="{{categoria}}">	
+                                            <option value="">Elige la categoria del producto</option>
 											<option value="Tecnologia">Tecnologia</option>
 											<option value="Mercado">Mercado</option>
 											<option value="Electrodomesticos">Electrodomesticos</option>
 										</select>
 									</div>
+
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Precio</label>
+								<div class="col-md-12">
+									
+										<label class="control-label">Precio</label>
 										<div class="input-group mb-3">
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="basic-addon1"><i class="ti-money"></i></span>
+												<span class="input-group-text" id="basic-addon1">$</span>
 											</div>
-											<input type="text" class="form-control" name="precio" placeholder="precio" aria-label="precio"
-												value="{{precio}}" aria-describedby="basic-addon1">
+											<input type="text" class="form-control" name="precio" placeholder="precio" aria-label="precio" value="{{precio}}" aria-describedby="basic-addon1">												
 										</div>
-									</div>
+									
 								</div>
 							</div>
 							<h5 class="card-title m-t-40">Descripción del producto</h5>
@@ -47,14 +47,14 @@
 								<div class="col-md-12 ">
 									<div class="form-group">
 										<textarea class="form-control" name="descripcion" value="{{descripcion}}"
-											rows="4">ingrese una descripcion</textarea>
+											rows="4" placeholder="Ingrese una descripción"></textarea>
 									</div>
 								</div>
 							</div>
 							<!--/row-->
 							<div class="row">
 								<div class="col-md-3">
-									<h5 class="card-title m-t-20">Upload Image</h5>
+									<h5 class="card-title m-t-20">Imagen del producto</h5>
 									<div class="el-element-overlay">
 										<div class="el-card-item">
 											<div class="el-card-avatar el-overlay-1">
@@ -63,7 +63,8 @@
 										</div>
 									</div>
 									<div class="btn btn-info waves-effect waves-light"><span>Cargar otra imagen</span>
-										<input type="file" name="imagenProducto" accept="image/*" class="upload"> </div>
+										<input type="file" name="imagenProducto" accept="image/*" class="upload">
+									</div>
 								</div>
 							</div>
 							<hr>
