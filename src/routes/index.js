@@ -310,22 +310,36 @@ app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 	const product = new Product({
 		nombre, codigo, categoria, imagen: req.file.buffer, descripcion, precio
 	});
-	product.save((err, producto) => {
+
+	Product.findOne({nombre}, (err, result) => {
 		if (err) {
-			console.log(err);
-			res.render('createproduct', {
-				registro: req.body.registro,
-				show: 'Upss! el producto no se pudo registrar',
-			});
-		} else if (producto) {
-			res.render('dashboardupdateproduct', producto);
+			return console.log(err);
+		}
+		
+		if (result.nombre === nombre) {
+			console.log('Producto repetido...');
+			res.render('dashboardupdateproductwrong', product);
 		} else {
-			res.render('createproduct', {
-				registro: req.body.registro,
-				show: 'Upss! el producto no se pudo registrar',
+			product.save((err, producto) => {
+				if (err) {
+					console.log(err);
+					res.render('createproduct', {
+						registro: req.body.registro,
+						show: 'Upss! el producto no se pudo registrar',
+					});
+				} else if (producto) {
+					res.render('dashboardupdateproduct', producto);
+				} else {
+					res.render('createproduct', {
+						registro: req.body.registro,
+						show: 'Upss! el producto no se pudo registrar',
+					});
+				}
 			});
 		}
 	});
+
+	
 });
 app.post('/deleteproduct', (req, res) => {
 	const { id } = req.body;

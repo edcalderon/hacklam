@@ -24,7 +24,7 @@ const clientSchema = new Schema({
 		lowercase: true,
 	},
 	cc: {
-		type: Number,
+		type: String,
 		required: true,
 		trim: true,
 		unique: true,
