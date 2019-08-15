@@ -62,7 +62,7 @@
                   </form>
                   <hr>
                     <div class="text-center">
-                      <a class="small" href="#">Olvidaste tu contraseña?</a>
+                      <a class="small" href="#" onclick="alertaAdmin();">Olvidaste tu contraseña?</a>
                     </div>
                   <hr>
                 </div>
@@ -73,6 +73,19 @@
       </div>
     </div>
   </div>
+
+
+<script>
+function alertaAdmin(){
+  var user = prompt("Introduce tu nombre de usuario:", "");
+
+  if (user == null || user == "") {
+    window.alert("El usuario no es válido.");
+  } else {
+    window.alert("El administrador ha sido notificado.");
+  }
+}
+</script>
 
 {{#if login}}
 <script>
