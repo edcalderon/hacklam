@@ -34,6 +34,7 @@
                         </div>
                     </div>
                 </div>
+                <div id="notifications"></div>
             </div>
         </div>
         <!-- Column -->
@@ -114,8 +115,12 @@
                     url: `/findUser?cedula=${cedula_cliente.value}&updatePoints=${puntos}`
                 })
                 .done(function(res) {  
-                    $("#modal-TotalCost").modal('hide');
                     console.log(res.esiPuntos)
+                    $("#modal-TotalCost").modal('hide');
+                    $("#notifications").append(`  <div class="alert alert-success">
+                                                   <a href="/dashboardprofile"><strong>Esito!</strong> has acumulado ${puntos} puntos</a> 
+                                                  </div>
+                                               `)
                 })
             });
         })

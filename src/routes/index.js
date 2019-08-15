@@ -81,6 +81,8 @@ app.post('/login', (req, res) => {
 			req.session.phone = result.phone;
 			req.session.esiPuntos = result.esiPuntos;
 			req.session.administrador = true;
+			console.log(result._id)
+			console.log(req.session.id)
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
@@ -449,7 +451,7 @@ app.get('/findUser', (req, res) => {
 		});
 	}
 	if(req.query.updatePoints){
-		User.findOneAndUpdate({ cc: req.query.cedula }, { $inc: { esiPuntos: req.query.updatePoints } }, (err, result) => {
+		User.findOneAndUpdate({ cc: req.query.cedula }, { $inc: { esiPuntos: req.query.updatePoints } }, { new: true },(err, result) => {
 			if (err) {
 				console.log(err);
 			} 
@@ -558,6 +560,7 @@ app.get('/dashboardprofile', (req, res) => {
 });
 
 app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
+	console.log(req.session.id)
 	if (req.body.avatar) {
 		User.findOneAndUpdate(
 			{ _id: req.session.id }, { $set: { avatar: req.file.buffer } }, { new: true },
