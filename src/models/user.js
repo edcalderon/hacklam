@@ -62,6 +62,10 @@ const userSchema = new Schema({
 	avatar: {
 		type: Buffer,
 	},
+	esiPuntos: {
+		type: Number,
+		default: 0
+	}
 });
 
 // create mongoose model
