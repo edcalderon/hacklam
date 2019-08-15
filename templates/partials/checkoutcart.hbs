@@ -98,7 +98,7 @@
         const totalBruto = document.getElementById("totalBruto");
         const efectivo = document.getElementById("efectivo");
         const cambio = document.getElementById("cambio");
-        const total = parseInt(efectivo.value) - parseInt(totalBruto.innerText);
+        const total = parseInt(efectivo.value.replace("$", "")) - parseInt(totalBruto.innerText.replace("$", ""));
         cambio.innerText = total;
     }
     function cliente() {
