@@ -17,21 +17,14 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
           <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800"></h1>
+          <div style="display:flex; flex-direction:column; align-items:center">
+              <h2 style="color: rgb(189, 5, 5)">El producto ya existe</h2>
+              <br>
+              <a href="/createproduct"><button type="button" class="btn btn-warning">Regresar</button></a>
+              <br><br>
+              <img src="../../public/img/alert.png" alt="Aquí va una alerta">
           </div>
-
-          <!-- Area Chart -->
-          {{#if registro}}
-          <h2 class="text-center" id="title">{{{show}}}</h2>
-          {{/if}}
-          {{>adminproductupdateform}}
-
-          <div class="row">
-            <!-- Content Column -->
-            <div class="col-lg-6 mb-4"> </div>
-            <div class="col-lg-6 mb-4"> </div>
-          </div>
+         
           <!-- end Content Row -->
         </div>
         <!-- end container-fluid -->

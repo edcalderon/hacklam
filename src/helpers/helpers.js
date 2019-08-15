@@ -1,5 +1,72 @@
 const hbs = require('hbs');
 
+
+hbs.registerHelper('sum', (productos) => {
+	if (productos) {
+		const total = productos.reduce((acum, producto) => acum + (producto.precio), 0);
+		return total;
+	}
+	return 0;
+});
+
+hbs.registerHelper('listarArticulos', (articulos) => {
+	let texto = '';
+	articulos.forEach((art) => {
+		texto += `
+	<div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="el-card-item">
+									<div class="el-card-avatar el-overlay-1"> <img src="data:img/jpeg;base64,${art.imagen.toString('base64')}" alt="user" />
+									</div>
+										<div class="d-flex no-block align-items-center">
+											<div class="m-l-15">
+												<h4 class="m-b-0">${art.nombre}</h4>
+												<span class="text-muted">${art.descripcion}</span>
+											</div>
+											<div class="ml-auto m-r-15">
+													<button type="button" class="btn btn-dark btn-circle">$${art.precio}</button>
+											</div>
+								       </div>
+                                 </div>
+                        </div>
+                    </div>
+	
+`;
+	});
+	return texto;
+});
+
+hbs.registerHelper('section', function (name, options) {
+	if (!this._sections) this._sections = {};
+	this._sections[name] = options.fn(this);
+	return null;
+});
+
+hbs.registerHelper('listarProductosCart', (productos, cant) => {
+	let texto = '';
+	let i = 0;
+	productos.forEach((art) => {
+		texto += `
+	<tr>
+		<td width="150"><img src="data:img/jpeg;base64,${art.imagen.toString('base64')}" alt="iMac" width="80"></td>
+		<td width="550">
+			<h5 class="font-500">${art.nombre}</h5>
+			<p>${art.descripcion}</p>
+		</td>
+		<td>${art.sede}</td>
+		<td id="precio-${i}">$${art.precio}</td>
+		<td width="70" onclick="total(${i});">
+			<input type="text" id="input-${i}" onchange="total(${i});" class="input form-control" placeholder="1" value="${cant}">
+		</td>
+		<td width="150" align="center" id="total-${i}" class="font-500 totalItem">${art.precio}</td>
+		<td align="center"><a href="javascript:void(0)" class="text-inverse" title="" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash text-dark"></i></a></td>
+	</tr>
+	`;
+		i += 1;
+	});
+	return texto;
+});
+
 hbs.registerHelper('listarUsuarios', (usuarios) => {
 	let texto = '';
 	usuarios.forEach((usr) => {
@@ -9,8 +76,8 @@ hbs.registerHelper('listarUsuarios', (usuarios) => {
 			 <td>${usr.cc}</td>
 			 <td class="cell100 column4">   
 			   <div class="inblock" >
-				 <i id="edit" data-id="${usr.cc}" class="fa fa-pencil" ></i>
-				 <i id="delete" data-id="${usr.cc}" class="fa fa-trash"></i>
+			   <button type="button" class="btn btn-outline-primary"><i id="edit" data-id="${usr.cc}" class="fa fa-pencil" >Editar&nbsp;&nbsp;</i></button>
+			   <button type="button" class="btn btn-outline-danger"><i id="delete" data-id="${usr.cc}" class="fa fa-trash">Eliminar&nbsp;&nbsp;</i></button>
 				 <input type="checkbox" data-id="${usr.cc}" class="check"/> 
 			   </div>
 			 </td>
@@ -19,19 +86,98 @@ hbs.registerHelper('listarUsuarios', (usuarios) => {
 	return texto;
 });
 
-
 hbs.registerHelper('listarProductos', (productos) => {
 	let texto = '';
-	productos.forEach((producto) => {
+	if (productos) {
+		productos.forEach((prod) => {
+			prod.sede.forEach((city) => {
+				texto += `
+				<form action="/updatestock" method="get>
+					<tr role="row" class="odd">
+						<td class="sorting_1 col-6">${prod.nombre}</td>
+						<td class="col-md-auto">${prod.precio}</td>
+						<td>${city}</td>
+						<td class="cell100 column4">   
+							<div class="inblock" >
+							<i id="edit" data-id="${prod._id}" class="fa fa-pencil" ></i>
+							<i id="delete" data-id="${prod._id}" class="fa fa-trash"></i>
+							<i id="shop" data-id="${prod.id}"  data-sede="${city}"class="fa fa-cart-plus cartshop"></i>
+							<input type="checkbox" data-id="${prod._id}" class="check"/> 
+							</div>
+						</td>
+					</tr>
+				</form>
+			`;
+			});
+		});
+	}
+	return texto;
+});
+
+hbs.registerHelper('listarProductosTienda', (productos) => {
+	let texto = '';
+	productos.forEach((prod) => {
 		texto += `<tr role="row" class="odd">
-			 <td class="sorting_1">${producto.name}</td>
-			 <td>${producto.cantidad}</td>
-			 <td>${producto.sede}</td>
-            </tr>`;
+		 <td class="sorting_1">${prod.nombre}</td>
+		 <td>${prod.cantidad}</td>
+		 <td>${prod.sede}</td>
+		</tr>`;
 	});
 	return texto;
 });
 
+hbs.registerHelper('listProdUp', (productos) => {
+	let contenido = '';
+	productos.forEach((prod) => {
+		prod.sede.forEach((city) => {
+			contenido += `
+				<form action="/updatestock" method="get>
+					<tr role="row" class="odd">
+						<td>${prod.codigo}</td>
+						<td>${prod.nombre}</td>
+						<td>${prod.categoria}</td>
+						<td>
+							<div class="d-flex justify-content-around">
+								<span>${prod.cantidad[city]}</span>
+								<input type="number" placeholder="0" class="text-center" name="cantidad">
+								<input type="texto" name="sede" value="${city}" hidden>
+								<input type="texto" name="nombre" value="${prod.nombre}" hidden>
+								<button type="submit" class="btn btn-primary">Agregar</button>
+							</div>
+						</td>
+						<td>${city}</td>
+					</tr>
+				</form>
+			`;
+		});
+	});
+	return contenido;
+});
+
+hbs.registerHelper('listarProductosTiendaUpdate', (productos) => {
+	let texto = '';
+	productos.forEach((prod) => {
+		prod.sede.forEach((city) => {
+			texto += `<form action="/updatestock" method="GET">
+		 <tr role="row" class="odd">
+		 <td class="sorting_1">${prod.nombre}</td>
+		 <td>${prod.codigo}</td>
+		 <td>${prod.categoria}</td>
+		 <td>
+			<div class="input-group mb-3" style="display: flex; justify-content: space-between">
+				<span>${prod.cantidad[city]}</span>
+				<input type="number" name="cantidad">
+				<input type="text" name="sede" value="${city}" hidden>
+				<input type="text" name="nombre" value="${prod.nombre}" hidden>
+				<button class="btn btn-primary" type="submit">Agregar</button>
+			</div>
+		 </td>
+		 <td>${city}</td>
+		</tr></form>`;
+		});
+	});
+	return texto;
+});
 
 hbs.registerHelper('disponibleCourses', (listado) => {
 	let texto = ' ';
@@ -79,7 +225,7 @@ hbs.registerHelper('inscription', (listado) => {
 					<tbody>`;
 	listado.forEach((materia) => {
 		texto +=
-					`<tr>
+			`<tr>
 					<td> ${materia.name} </td>
 					<td> ${materia.value} </td>
 					<td> ${materia.intensity}</td>
@@ -117,7 +263,7 @@ hbs.registerHelper('closeCourse', (courses) => {
 		const myJSON = JSON.stringify(course.students);
 
 		texto +=
-					`<tr>
+			`<tr>
 					<td> ${course.name} </td>
 					<td> ${course.value} </td>
 					<td> ${course.intensity}</td>
@@ -163,7 +309,7 @@ hbs.registerHelper('cancelIncription', (miscursos) => {
 					<tbody>`;
 	miscursos.forEach((materia) => {
 		texto +=
-					`<tr>
+			`<tr>
 					<td> ${materia.name} </td>
 					<td> ${materia.value} </td>
 					<td> ${materia.intensity}</td>
@@ -189,7 +335,7 @@ hbs.registerHelper('modifyUser', (misusuarios) => {
 					<tbody>`;
 	misusuarios.forEach((usuario) => {
 		texto +=
-					`<tr>
+			`<tr>
 					<td> ${usuario.firstname} </td>
 					<td> ${usuario.lastname} </td>
 					<td> ${usuario.cc}</td>
@@ -208,7 +354,7 @@ hbs.registerHelper('assignTeacher', (teachers) => {
 					<option selected="">Elija el profesor</option>`;
 	teachers.forEach((teacher) => {
 		texto +=
-					`<option value="${teacher.cc}">${teacher.firstname}</option>`;
+			`<option value="${teacher.cc}">${teacher.firstname}</option>`;
 	});
 	texto += '</select></form>';
 	return texto;
@@ -236,7 +382,7 @@ hbs.registerHelper('infoTeachers', (materias) => {
 			console.log(students);
 
 			texto +=
-						`<tr>
+				`<tr>
 						<td> ${curso.name} </td>
 						<td> ${curso.value} </td>
 						<td> ${curso.intensity}</td>

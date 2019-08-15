@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Login</title>
+  <title>Inicio de Sesión</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -37,7 +37,7 @@
               <div class="col-lg-7">
                 <div class="p-5">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Bienvenido de vuelta!</h1>
+                    <h1 class="h4 text-gray-900 mb-4">Bienvenido de Nuevo!</h1>
                   </div>
                   <form class="user" method="Post" action="/login">
                     <div class="form-group">
@@ -54,14 +54,15 @@
                     </div>
                       <input type="hidden" name="registro"  value="registro">
                       <input type="hidden" name="login"  value="login">
-                      <input type="submit" class="btn btn-primary btn-user btn-block"  value="Entrar" >
+                      <input type="submit" class="btn btn-primary btn-user btn-block"  value="Iniciar" >
+                      <br>
+                      <div class="text-center">
+                        <a class="btn btn-primary btn-user btn-block" href="/indexdashboard" role="button">Cancelar</a>
+                      </div>
                   </form>
                   <hr>
                     <div class="text-center">
-                      <a class="small" href="#">Olvidaste tu contraseña?</a>
-                    </div>
-                    <div class="text-center">
-                      <a class="small" href="/indexdashboard">Volver</a>
+                      <a class="small" href="#" onclick="alertaAdmin();">Olvidaste tu contraseña?</a>
                     </div>
                   <hr>
                 </div>
@@ -72,6 +73,19 @@
       </div>
     </div>
   </div>
+
+
+<script>
+function alertaAdmin(){
+  var user = prompt("Introduce tu nombre de usuario:", "");
+
+  if (user == null || user == "") {
+    window.alert("El usuario no es válido.");
+  } else {
+    window.alert("El administrador ha sido notificado.");
+  }
+}
+</script>
 
 {{#if login}}
 <script>

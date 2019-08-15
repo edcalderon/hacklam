@@ -25,8 +25,8 @@ app.set('view engine', 'hbs');// Le configuramos el motor de templates o de vist
 
 // Models mongodb
 const User = require('./../models/user');
+const Client = require('./../models/client');
 const Product = require('../models/product');
-const Store = require('./../models/store');
 
 // Session
 app.use(session({
@@ -49,7 +49,8 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-	User.findOne({ user: req.body.inputUser }, (err, result) => {
+	const { inputUser } = req.body;
+	User.findOne({ $or: [{ email: inputUser }, { user: inputUser }] }, (err, result) => {
 		if (err) {
 			console.log(err);
 		} else if (!result) {
@@ -78,7 +79,10 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.esiPuntos = result.esiPuntos;
 			req.session.administrador = true;
+			console.log(result._id)
+			console.log(req.session.id)
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
@@ -99,6 +103,7 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.esiPuntos = result.esiPuntos;
 			req.session.gerente = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
@@ -120,14 +125,15 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.esiPuntos = result.esiPuntos;
+			req.session.bodeguero = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
-
 			res.render('login', {
 				login: req.body.login,
 				show: 'Bienvenido Bodeguero',
-				path: '/dashboardbodeguero',
+				path: '/dashboardproducts',
 				button: 'success',
 			});
 		} else if (result.roll === 'cajero') {
@@ -141,10 +147,11 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.esiPuntos = result.esiPuntos;
+			req.session.cajero = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
-
 			res.render('login', {
 				login: req.body.login,
 				show: 'Bienvenido Cajero',
@@ -164,24 +171,12 @@ app.get('/dashboarduser', (req, res) => {
 	res.render('dashboarduser', {});
 });
 
-app.get('/dashboardproducts', (req, res) => {
-	Product.find({}, (err, result) => {
-		if (err) {
-			console.log(err);
-		}
-		res.render('dashboardproducts', {
-			products: result,
-		});
-	});
-});
-
 app.post('/dashboardproduct', (req, res) => {
-	console.log(req.body.id);
-	Product.findOne({ _id: req.body.id }, (err, product) => {
+	console.log(req.body.nombre);
+	Product.findOne({ nombre: req.body.nombre }, (err, product) => {
 		if (err) {
 			console.log(err);
 		} else if (product) {
-			console.log(product);
 			res.render('dashboardupdateproduct', product);
 		} else {
 			console.log(product);
@@ -202,16 +197,28 @@ const upload = multer({
 	},
 });
 
+app.get('/dashboarduser', (req, res) => {
+	Product.find({}, (err, result) => {
+		if (err) {
+			console.log(err);
+		}
+		res.render('dashboarduser', {
+			listarproductos: req.query.listarproductos,
+			articulos: result,
+		});
+	});
+});
+
 app.post('/dashboardupdateproduct', upload.single('imagenProducto'), (req, res) => {
 	const conditions = {};
 	const {
-		id, name, type, description, count, price, location,
+		id, nombre, categoria, descripcion, precio,
 	} = req.body;
 	Object.assign(conditions, {
-		name, type, description, count, price, location,
+		nombre, categoria, descripcion, precio,
 	});
 	if (req.file) {
-		Object.assign(conditions, { photo: req.file.buffer });
+		Object.assign(conditions, { imagen: req.file.buffer });
 	}
 
 	Product.findOneAndUpdate(
@@ -226,13 +233,11 @@ app.post('/dashboardupdateproduct', upload.single('imagenProducto'), (req, res) 
 			} else if (resultado) {
 				res.render('dashboardupdateproduct', {
 					_id: resultado._id,
-					name: resultado.name,
-					type: resultado.type,
-					photo: resultado.photo,
-					description: resultado.description,
-					count: resultado.count,
-					price: resultado.price,
-					location: resultado.location,
+					nombre: resultado.nombre,
+					categoria: resultado.categoria,
+					imagen: resultado.imagen,
+					descripcion: resultado.descripcion,
+					precio: resultado.precio,
 					resultshow: 'Datos actualizados correctamente',
 				});
 			} else {
@@ -249,6 +254,7 @@ app.post('/dashboardupdateproduct', upload.single('imagenProducto'), (req, res) 
 app.get('/register', (req, res) => {
 	res.render('register', {});
 });
+
 
 app.post('/register', (req, res) => {
 	const user = new User({
@@ -287,36 +293,60 @@ app.post('/register', (req, res) => {
 	});
 });
 
+app.get('/createclient', (req, res) => {
+	res.render('createclient', {});
+});
+
 app.get('/createproduct', (req, res) => {
 	res.render('createproduct', {});
 });
 
 app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 	const {
-		name, type, description, count, price, location,
+		nombre, categoria, descripcion, precio,
 	} = req.body;
+	var codigo = randomStr(10, '12345abcde')
+	function randomStr(len, arr) {
+		var ans = '';
+		for (var i = len; i > 0; i--) {
+			ans +=
+				arr[Math.floor(Math.random() * arr.length)];
+		}
+		return ans;
+	}
 	const product = new Product({
-		name, type, photo: req.file.buffer, description, count, price, location,
+		nombre, codigo, categoria, imagen: req.file.buffer, descripcion, precio
 	});
-	console.log(req.body);
-	product.save((err, producto) => {
+
+	Product.findOne({ nombre }, (err, result) => {
 		if (err) {
-			console.log(err);
-			res.render('dashboardupdateproduct', {
-				registro: req.body.registro,
-				show: 'Upss! el producto no se pudo registrar',
+			return console.log(err);
+		}
+		if (result === null) {
+			product.save((err, producto) => {
+				if (err) {
+					console.log(err);
+					res.render('createproduct', {
+						registro: req.body.registro,
+						show: 'Upss! el producto no se pudo registrar',
+					});
+				} else if (producto) {
+					res.render('dashboardupdateproduct', producto);
+				} else {
+					res.render('createproduct', {
+						registro: req.body.registro,
+						show: 'Upss! el producto no se pudo registrar',
+					});
+				}
 			});
-		} else if (producto) {
-			res.render('dashboardupdateproduct', producto);
 		} else {
-			res.render('dashboardupdateproduct', {
-				registro: req.body.registro,
-				show: 'Upss! el producto no se pudo registrar',
-			});
+			console.log('Producto repetido...');
+			res.render('dashboardupdateproductwrong', product);
 		}
 	});
-});
 
+
+});
 app.post('/deleteproduct', (req, res) => {
 	const { id } = req.body;
 	Product.deleteOne({ _id: id }, (err) => {
@@ -335,13 +365,60 @@ app.post('/deleteproduct', (req, res) => {
 	});
 });
 
-app.get('/dashboardadmin', (req, res) => {
-	User.find({}, (err, result) => {
+app.get('/shopingcart', (req, res) => {
+	const { id, sede } = req.query;
+	Product.findOne({ _id: id }, (err, product) => {
 		if (err) {
 			console.log(err);
 		}
-		res.render('dashboardadmin', {
-			usuarios: result,
+		product.sede = sede;
+		if (req.session.shopingcart) {
+			const result = req.session.shopingcart.filter(producto => producto._id === id && producto.sede == sede);
+			console.log(result);
+			if (result.length === 0) {
+				req.session.shopingcart.push(product);
+				res.json(product);
+			} else {
+				res.json(null);
+			}
+		} else {
+			req.session.shopingcart = [];
+			req.session.shopingcart.push(product);
+			res.json(product);
+		}
+	});
+});
+
+
+app.get('/checkout', (req, res) => {
+	res.render('dashboardadmin', {
+		checkout: true,
+		productos: req.session.shopingcart,
+		cant: 1,
+	});
+});
+
+function total(id) {
+	console.log("editar input-" + id);
+}
+
+
+app.get('/dashboardadmin', (req, res) => {
+	Product.find({}, (err, result1) => {
+		if (err) {
+			console.log(err);
+		}
+		User.find({}, (error, result2) => {
+			if (error) {
+				console.log(error);
+			}
+			res.render('dashboardadmin', {
+				listar: req.query.listar,
+				listararticulos: req.query.listararticulos,
+				registrar: req.query.registrar,
+				usuarios: result2,
+				articulos: result1,
+			});
 		});
 	});
 });
@@ -367,26 +444,90 @@ app.get('/dashboardadmintable', (req, res) => {
 	});
 });
 
-app.post('/dashboardadmin', (req, res) => {
-	User.findOne({ cc: req.body.busqueda }, (err, result) => {
-		if (err) {
-			console.log(err);
-		} else if (result) {
-			req.session.usuario = result;
-			res.render('dashboardupdateuser', {
-				firstnameUser: result.firstname,
-				lastnameUser: result.lastname,
-				emailUser: result.email,
-				user: result.user,
-				phoneUser: result.phone,
-				ccUser: result.cc,
-				rollUser: result.roll,
-				sedeUser: result.sede,
+app.get('/findUser', (req, res) => {
+	if (!req.query.updatePoints) {
+		User.findOne({ cc: req.query.cedula }, (err, result) => {
+			if (err) {
+				console.log(err);
+			}
+			res.json(result);
+		});
+	}
+	if (req.query.updatePoints) {
+		User.findOneAndUpdate({ cc: req.query.cedula }, { $inc: { esiPuntos: req.query.updatePoints } }, { new: true }, (err, result) => {
+			if (err) {
+				console.log(err);
+			}
+			res.json(result);
+		});
+	}
+});
+
+app.get('/pay', (req, res) => {
+	const data = req.query.productos;
+	const productos = JSON.parse(data);
+	let count = 1;
+	productos.forEach((producto) => {
+		const { nombre, sede, cantidad } = producto;
+		Product.findOne({ nombre: producto.nombre }, (err, result) => {
+			if (err) return console.log(err);
+			const test = result.cantidad;
+			test[sede] -= parseInt(cantidad, 10);
+			Product.updateOne({ nombre }, { $set: { cantidad: test } }, (error) => {
+				if (error) return console.log(err);
+				if (count === productos.length) {
+					req.session.shopingcart = [];
+					res.json({});
+				} else {
+					count += 1;
+				}
 			});
-		} else {
-			res.render('dashboardadmin');
-		}
+		});
 	});
+});
+app.post('/dashboardadmin', upload.single('imagenProducto'), (req, res) => {
+	if (req.query.listar) {
+		User.findOne({ cc: req.body.busqueda }, (err, results) => {
+			if (err) {
+				console.log(err);
+			} else if (results) {
+				req.session.usuario = results;
+				res.render('dashboardupdateuser', {
+					firstnameUser: results.firstname,
+					lastnameUser: results.lastname,
+					phoneUser: results.phone,
+					rollUser: results.roll,
+					ccUser: results.cc,
+					emailUser: results.email,
+				});
+			} else {
+				res.render('dashboardadmin');
+			}
+		});
+	}
+	if (req.query.registrar) {
+		const producto = new Product({
+			nombre: req.body.nombre,
+			categoria: req.body.categoria,
+			codigo: req.body.codigo,
+			cantidad: req.body.cantidad,
+			precio: req.body.precio,
+			descripcion: req.body.descripcion,
+			descuento: req.body.descuento,
+			imagen: req.file.buffer,
+		});
+		producto.save((err) => {
+			if (err) {
+				console.log(err);
+				res.render('dashboardadmin', {
+					resultshow: 'Error cargado producto',
+				});
+			}
+			res.render('dashboardadmin', {
+				resultshow: 'Producto cargado correctamente',
+			});
+		});
+	}
 });
 
 app.get('/dashboardupdateuser', (req, res) => {
@@ -442,6 +583,7 @@ app.get('/dashboardprofile', (req, res) => {
 });
 
 app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
+	console.log(req.session.id)
 	if (req.body.avatar) {
 		User.findOneAndUpdate(
 			{ _id: req.session.id }, { $set: { avatar: req.file.buffer } }, { new: true },
@@ -486,6 +628,7 @@ app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
 						phone: resultado.phone,
 						cc: resultado.cc,
 						roll: resultado.roll,
+						esiPuntos: resultado.esiPuntos,
 						resultshow: 'Datos actualizados correctamente.',
 					});
 				}
@@ -494,55 +637,207 @@ app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
 	}
 });
 
-app.get('/addstore', (req, res) => {
-	const { id } = req.query;
-	Product.findOne({ _id: id }, (err, product) => {
-		if (err) {
-			console.log(err);
-		} else if (product) {
-			res.render('addstore', product);
-		} else {
-			console.log(product);
-		}
-	});
-});
-
-app.post('/addstore', (req, res) => {
-	const { id, cantidad, name } = req.body;
-	const { sede } = req.session;
-	const store = new Store({
-		cantidad, name, product: id, sede,
-	});
-	console.log(req.body);
-	store.save((err, element) => {
-		if (err) {
-			console.log(err);
-		} else if (element) {
-			res.render('addstore', {
-				registro: true,
-				show: "<a href='/dashboardproducts'>Agreagado a la tienda exitosamente!</a>",
+app.get('/dashboardstoreupdate', (req, res) => {
+	const { sede, roll } = req.session;
+	if (roll === 'administrador') {
+		Product.find({}, (err, result) => {
+			if (err) {
+				console.log(err);
+			} else {
+				res.render('dashboardstoreupdate', {
+					productos: result,
+				});
+			}
+		});
+	} else {
+		Product.find({ sede }, (err, result) => {
+			if (err) {
+				console.log(err);
+			}
+			const filtro = result.filter((obj) => {
+				if ('sede' in obj) return obj.sede.includes(sede);
 			});
-		} else {
-			console.log(element);
-		}
-	});
+			filtro.forEach((obj) => {
+				obj.sede = [sede];
+			});
+			res.render('dashboardstoreupdate', {
+				productos: filtro,
+			});
+		});
+	}
 });
 
-app.get('/dashboardstore', (req, res) => {
-	const { sede } = req.session;
-	Store.find({ sede }, (err, result) => {
-		if (err) {
-			console.log(err);
+app.get('/updatestock', (req, res) => {
+	const { nombre, sede, cantidad } = req.query;
+	Product.find({ nombre }, (err, result) => {
+		if (err) return console.log(err);
+		const test = result[0].cantidad;
+		let cant = parseInt(cantidad, 10);
+		if (test[sede] + cant >= 0) {
+			test[sede] += cant;
+		} else {
+			test[sede] = 0;
 		}
-		res.render('dashboardstore', {
-			productos: result,
+		Product.updateOne({ nombre }, { $set: { cantidad: test } }, (error, result) => {
+			if (error) return console.log(err);
+			const { sede, roll } = req.session;
+			if (roll === 'administrador') {
+				Product.find({}, (errors, result) => {
+					if (errors) {
+						return console.log(errors);
+					}
+					res.render('dashboardstoreupdate', {
+						productos: result,
+					});
+				});
+			} else {
+				Product.find({ sede }, (err, result) => {
+					if (err) {
+						console.log(err);
+					}
+					const filtro = result.filter((obj) => {
+						if ('sede' in obj) return obj.sede.includes(sede);
+					});
+					filtro.forEach((obj) => {
+						obj.sede = [sede];
+					});
+					res.render('dashboardstoreupdate', {
+						productos: filtro,
+					});
+				});
+			}
 		});
 	});
+});
+
+app.get('/dashboardproducts', (req, res) => {
+	Product.find({}, (err, result) => {
+		if (err) {
+			console.log(err);
+		}
+		res.render('dashboardproducts', {
+			productos: result,
+
+		});
+	});
+});
+app.get('/deleteproduct', (req, res) => {
+	const { id } = req.query;
+	console.log(id);
+	Product.findOneAndDelete({ _id: id }, (err, result) => {
+		if (err) {
+			console.log(err);
+		} else {
+			res.json(result);
+		}
+	});
+});
+
+
+app.get('/dashboardeditararticulo', (req, res) => {
+	if (req.query.editar) {
+		Product.findOne({ _id: req.query.editar }, (err, result) => {
+			console.log(result);
+			if (err) {
+				console.log(err);
+			}
+			res.render('dashboardeditararticulo', {
+				editar: true,
+				id: req.query.editar,
+				nombre: result.nombre,
+				codigo: result.codigo,
+				categoria: result.categoria,
+				cantidad: result.cantidad,
+				precio: result.precio,
+				descuento: result.descuento,
+				descripcion: result.descripcion,
+				imagen: result.imagen.toString('base64'),
+			});
+		});
+	}
+});
+
+app.post('/dashboardeditararticulo', upload.single('imagenProducto'), (req, res) => {
+	const conditions = {};
+
+	if (req.body.nombre) {
+		console.log(`Nombre modificado! ${req.body.nombre}`);
+		Object.assign(conditions, { nombre: req.body.nombre });
+	}
+	if (req.body.categoria) {
+		console.log(`Nombre modificado! ${req.body.categoria}`);
+		Object.assign(conditions, { categoria: req.body.categoria });
+	}
+	if (req.body.cantidad) {
+		console.log(`cantidad modificado!${req.body.cantidad}`);
+		Object.assign(conditions, { cantidad: req.body.cantidad });
+	}
+	if (req.body.precio) {
+		console.log(`precio modificado! ${req.body.precio}`);
+		Object.assign(conditions, { precio: req.body.precio });
+	}
+	if (req.body.codigo) {
+		console.log(`codigo modificado! (${req.body.codigo})`);
+		Object.assign(conditions, { codigo: req.body.codigo });
+	}
+	if (req.body.descuento) {
+		console.log('descuento modificado!');
+		Object.assign(conditions, { descuento: req.body.descuento });
+	}
+	if (req.body.descripcion) {
+		console.log('descripcion modificado!');
+		Object.assign(conditions, { descripcion: req.body.descripcion });
+	}
+	if (req.body.imagen) {
+		console.log('imagen modificado!');
+		Object.assign(conditions, { imagen: req.file.buffer });
+	}
+	try {
+		console.log('Comenzando edición');
+		Product.findOneAndUpdate(
+			{ codigo: req.body.codigo },
+			{ $set: conditions }, { new: true }, (err, result) => {
+				if (err) {
+					console.log('Con errores');
+					console.log(err);
+				} else {
+					console.log('Sin errores');
+					res.render('dashboardeditararticulo', {
+						editar: true,
+						nombre: result.nombre,
+						codigo: result.codigo,
+						categoria: result.categoria,
+						cantidad: result.cantidad,
+						precio: result.precio,
+						descuento: result.descuento,
+						descripcion: result.descripcion,
+						imagen: result.imagen.toString('base64'),
+						resultshow: 'Producto editado correctamente',
+					});
+				}
+			},
+		);
+	} catch (error) {
+		res.render('dashboardeditararticulo', {
+			editar: true,
+			nombre: result.nombre,
+			codigo: result.codigo,
+			categoria: result.categoria,
+			cantidad: result.cantidad,
+			precio: result.precio,
+			descuento: result.descuento,
+			descripcion: result.descripcion,
+			imagen: result.imagen.toString('base64'),
+			resultshow: 'Producto no ha sido editado',
+		});
+		console.log(`No sepudo actualizar, error -> ${error}`);
+	}
 });
 
 app.get('/exit', (req, res) => {
 	// localStorage.setItem('token', ' ')
 	res.locals.session = false;
+	res.locals.active = false;
 	req.session.destroy();
 	res.render('indexdashboard', {});
 });
@@ -553,6 +848,29 @@ app.get('/dashboardteacher', (req, res) => {
 
 app.get('*', (req, res) => {
 	res.render('error', {});
+});
+
+app.post('/createclient', (req, res) => {
+	const client = new Client({
+		firstname: req.body.firstName,
+		lastname: req.body.lastName,
+		email: req.body.inputEmail,
+		cc: req.body.cedula,
+		score: 0,
+	});
+	client.save((err) => {
+		if (err) {
+			console.log(err);
+			res.render('createclient', {
+				registro: req.body.registro,
+				show: 'Upss! el cliente con ese email o cedula ya existe',
+			});
+		}
+		res.render('createclient', {
+			registro: req.body.registro,
+			show: "<a href='/createClient'>Registro exitoso!</a>",
+		});
+	});
 });
 
 module.exports = app;

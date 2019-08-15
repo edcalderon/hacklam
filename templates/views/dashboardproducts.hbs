@@ -15,38 +15,37 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
           <!-- Page Heading -->
-          {{#if administrador}}
-          <a class="dropdown-item" href="/createproduct">
-            <i class="fas fa-store-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-            Crear producto
-          </a>
-          {{/if}}
           {{#if registro}}
           <h2 class="text-center" id="title">{{{show}}}</h2>
           {{/if}}
-          <ul class="products">
-            {{#each products}}
-            <div class="card card-product" style="width: 18rem;">
-              <img class="image-product card-img-top" alt="Card image cap" src="{{imagerSource photo}}">
-              <div class="card-body">
-                <h5 class="card-title">{{this.type}} - {{this.name}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{this.price}}</h6>
-                <p class="card-text">{{this.description}}</p>
-                {{#if ../gerente}}
-                  <form action="/addstore" method="get">
-                    <input type="hidden" value="{{this._id}}" name="id">
-                    <button type="submit" class="btn btn-primary">Agregar tienda</button>
-                  </form>
-                {{else}}
-                  <form action="/dashboardproduct" method="post">
-                    <input type="hidden" value="{{this._id}}" name="id">
-                    <button type="submit" class="btn btn-primary">Editar</button>
-                  </form>
-                {{/if}}
+          <div class="card-body">
+            <div class="limiter">
+              <div class="container-table100">
+                <div class="wrap-table100">
+                  <div class="row">
+                  {{#if bodeguero}}
+                    <form action="/addStore" method="get">
+                      <div class="form-row">
+                        <div class="col "><input type="text" name="nombre" placeholder=" Agregar a la tienda"></div>
+                        <div class="col "><button type="submit" class="btn btn-primary"> Agregar </button></div>
+                      </div>
+                    </form>
+                  {{/if}}
+                  {{#if administrador}}
+                    <form action="/dashboardproduct" method="post">
+                      <div class="form-row">
+                        <div class="col "><input type="text" name="nombre" placeholder=" Editar producto"></div>
+                        <div class="col "><button type="submit" class="btn btn-primary"> Editar </button></div>
+                      </div>
+                    </form>
+                  {{/if}}
+                  </div>
+                  <br></br>
+                  {{>productstable}}
+                </div>
               </div>
             </div>
-            {{/each}}
-          </ul>
+          </div>
           <!-- end Content Row -->
         </div>
         <!-- end container-fluid -->
@@ -55,10 +54,107 @@
       {{>footerdashboard}}
     </div>
     <!-- End of Content Wrapper -->
+   
+
   </div>
   <!-- End of Page Wrapper -->
   <!-- Footer -->
 
-</body>
+ <!-- sample modal content -->
 
+  <div id="modal-delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="modal-title">Este Modal es Sensible</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              </div>
+              <div class="modal-body">
+                  <form>
+                      <div class="form-group">
+                          <label for="recipient-name" class="control-label">Esta seguro que desea eliminar el articulo?</label>      
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                  <button id="btn-eliminar" type="button" class="btn btn-danger waves-effect waves-light">Guardar Cambios</button>
+              </div>
+          </div>
+      </div>
+  </div>
+<!-- /.modal -->
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
+<script>  
+$(function(){    
+      var id;     
+            $(".fa-pencil").on('click', function(){
+              id = $(this).data("id")
+              $.ajax({
+                  method: "GET",
+                  url: `/dashboardeditararticulo?editar=${id}`
+                })
+                .done(function() {
+                    window.location = `/dashboardeditararticulo?editar=${id}`
+                })
+            });    
+            $(".fa-trash").on('click', function(){ 
+              id = $(this).data("id") 
+              $("#modal-delete").modal("show")
+            })
+            $("#btn-eliminar").on('click', function(){ 
+              $("#modal-delete").modal("hide")
+                  $.ajax({
+                  method: "GET",
+                  url: `/deleteproduct?id=${id}`
+                  })
+                  .done(function(e) {
+                      $(`#${id}`).remove()
+                      toastr.success(`productos: ${e.nombre} borrado correctamente`);  
+                  })
+            });
+            $(".cartshop").on('click', function(){ 
+              id = $(this).data("id");
+              sede = $(this).data("sede");
+              $.ajax({
+                  method: "GET",
+                  url: `/shopingcart?id=${id}&sede=${sede}`
+                  })
+                  .done(function(product) {
+                    if(product)
+                      $(`#mini-cart`).append(`<a class="dropdown-item" href="#">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-3 text-center">
+                                    <img class="img-responsive" src="data:img/png;base64,${product.imagen.toString('base64')}"  width="60" height="60">         
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-4 text-center">
+                              <div class="text-truncate">${product.nombre}</div>
+                              <div class="small text-gray-500">$ ${product.precio}</div>           
+                            </div>   
+                            <div class="col-12 col-sm-12 col-md-3 text-center" >
+                                <div class="quantity">                 
+                                    <input type="number" step="1" max="99" min="1" value="1" title="Qty" class="qty" size="4" disabled>
+                                </div>
+                            </div>     
+                            <div class="col-12 col-sm-12 col-md-2 text-center">
+                                    <button type="button" class="btn btn-outline-danger btn-xs">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                            </div>
+                        </div> 
+                      </a> `)
+                      toastr.options.positionClass = 'toast-bottom-right';
+                      toastr.success(`producto añadido`);  
+                  })
+              
+            })   
+});
+
+ 
+
+</script>
+</body>
 </html>

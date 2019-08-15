@@ -42,6 +42,7 @@ app.use((req, res, next) => {
 		res.locals.email = req.session.email;
 		res.locals.cc = req.session.cc;
 		res.locals.phone = req.session.phone;
+		res.locals.esiPuntos= req.session.esiPuntos;
 		res.locals.listado = req.session.listado;
 		res.locals.courses = req.session.courses;
 		res.locals.miscursos = req.session.miscursos;
@@ -57,6 +58,7 @@ app.use((req, res, next) => {
 		res.locals.valorCursosInscritos = req.session.valorCursosInscritos;
 		res.locals.ganancia = req.session.ganancia;
 		res.locals.datos = req.session.datos;
+		res.locals.shopingcart = req.session.shopingcart;
 		// vars modify user by admin
 		if (req.session.modificar) {
 			res.locals.cursosUser = req.session.cursosUser;
@@ -69,9 +71,15 @@ app.use((req, res, next) => {
 			res.locals.rollUser = req.session.rollUser;
 		}
 		// vars change avatar
-		res.locals.avatar = (req.session.avatar) ? req.session.avatar : null;
-		res.locals.administrador = (req.session.administrador) ? true : null;
-		res.locals.gerente = (req.session.gerente) ? true : null;
+		const {
+			avatar, administrador, gerente, bodeguero, cajero,
+		} = req.session;
+		res.locals.avatar = avatar || null;
+		res.locals.administrador = administrador ? true : null;
+		res.locals.gerente = gerente ? true : null;
+		res.locals.bodeguero = bodeguero ? true : null;
+		res.locals.cajero = cajero ? true : null;
+		res.locals.active = administrador || gerente || bodeguero || cajero;
 	}
 	next();
 });

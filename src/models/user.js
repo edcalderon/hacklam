@@ -57,10 +57,15 @@ const userSchema = new Schema({
 		type: String,
 		required: true,
 		trim: true,
+		lowercase: true,
 	},
 	avatar: {
 		type: Buffer,
 	},
+	esiPuntos: {
+		type: Number,
+		default: 0
+	}
 });
 
 // create mongoose model
