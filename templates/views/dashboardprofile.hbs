@@ -22,23 +22,11 @@
           <!-- Content Row -->
           <div class="row">
             <!-- Area Chart -->
-              <div class="col-xl-12 col-lg-7 ">
+              <div class="col-xl-8 col-lg-8 ">
                 <div class="card text-center">
                   <!-- Card Header - Dropdown -->
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Perfil de {{firstname}} {{lastname}}</h6>
-                    <div class="dropdown no-arrow">
-                      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                      </div>
-                    </div>
                   </div>
                   <!-- Card Body -->
                   <div class="card-body">
@@ -46,20 +34,34 @@
                   </div>
                 </div>
               </div>
+              <div class="col-xl-4 col-lg-4 ">
+                        <div class="card card-hover">
+                            <div class="card-body" style="background:url(../../assets/images/background/active-bg.png) no-repeat top center;">                            
+                                <div class="p-t-20 text-center">
+                                    <i class="mdi mdi-file-chart display-4 text-orange d-block"></i>              
+                                    <span class="display-4 d-block font-medium"><i class="fas fa-star" style="color:yellow"></i></i></span>
+                                    <span>esiPuntos acumulados</span>
+                                    <!-- Progress -->
+                                    <div class="progress m-t-40" style="height:4px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-orange" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <!-- Progress -->
+                                    <!-- row -->
+                                    <a href="javascript:void(0)" class="waves-effect waves-light m-t-20 btn btn-lg btn-info accent-4 m-b-20">Detalles</a>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
           </div>
-        <!-- end Content Row -->
-        <!-- Content Row -->
-        <div class="row">
-          <!-- Content Column -->
-          <div class="col-lg-6 mb-4"> </div>
-          <div class="col-lg-6 mb-4"> </div>
-        </div>
-        <!-- end Content Row -->
         </div>
         <!-- end container-fluid -->
+         {{>footerdashboard}}
       </div>
       <!-- End of Main Content -->
-        {{>footerdashboard}}
+       
     </div>
     <!-- End of Content Wrapper -->
   </div>

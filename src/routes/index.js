@@ -316,7 +316,6 @@ app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 		if (err) {
 			return console.log(err);
 		}
-		
 		if (result.nombre === nombre) {
 			console.log('Producto repetido...');
 			res.render('dashboardupdateproductwrong', product);
@@ -432,6 +431,15 @@ app.get('/dashboardadmintable', (req, res) => {
 		if (err) {
 			console.log(err);
 		}
+		res.json(result);
+	});
+});
+
+app.get('/findUser', (req, res) => {
+	User.findOne({ cc: req.query.cedula }, (err, result) => {
+		if (err) {
+			console.log(err);
+		} 
 		res.json(result);
 	});
 });

@@ -1,42 +1,3 @@
-{{#section 'script'}}
-<script type="application/javascript">
-
-
-    alert("Funciono!");
-
-    $(function () {
-        alert("Hello World!");
-    });
-</script> {{/section}}
-
-<script>
-    var total = function (id) {
-        console.log("Prueba-" + id);
-        var precio = document.getElementById("precio-" + id);
-        var input = document.getElementById("input-" + id);
-        var tt = document.getElementById("total-" + id);
-        console.log(precio);
-        console.log(input);
-        console.log(tt);
-        tt.innerText = parseInt(precio.innerText.substr(1)) * parseInt(input.value);
-        var items = document.getElementsByClassName("totalItem");
-        var totalNeto = 0;
-        for (var i = 0; i < items.length; i++) {
-            totalNeto += parseInt(items[i].innerText);
-        }
-        var totalBruto = document.getElementById("totalBruto");
-        totalBruto.innerText = totalNeto;
-    }
-
-    const devuelta = function (id) {
-        const totalBruto = document.getElementById("totalBruto");
-        const efectivo = document.getElementById("efectivo");
-        const cambio = document.getElementById("cambio");
-        const total = parseInt(efectivo.value) - parseInt(totalBruto.innerText);
-        
-        cambio.innerText = total;
-    }
-</script>
 <div class="container-fluid">
     <!-- ============================================================== -->
     <!-- Start Page Content -->
@@ -86,45 +47,6 @@
                     <hr>
                     <h5>Paga con: </h5>
                     <button id='Efectivo-button' class="btn btn-primary" type='button' data-toggle="modal" data-target="modal-TotalCost">Efectivo</button>
-                    {{!-- <button class="btn btn-secondary btn-outline">Credito</button> --}} {{!-- modal --}}
-                    <div class="modal fade" id="modal-TotalCost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Cambio</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="recipient-name" class="col-form-label">Efectivo Recibido:</label>
-                                            <input type="text" onchange="devuelta();"  class="form-control" id="efectivo">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="message-text" class="col-form-label">Cambio a entregar:</label>
-                                            <textarea class="form-control" id="cambio"></textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary">Aceptar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <script>
-                        $(document).ready(function () {
-                            $("#Efectivo-button").click(function () {
-                                $("#modal-TotalCost").modal();
-                            });
-                        });
-                    </script> {{!-- cierra modal --}}
-
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
@@ -148,3 +70,92 @@
         </div>
     </div>
 </div>
+
+<script>
+    var totalNeto = 0;
+    var total = function (id) {
+        var precio = document.getElementById("precio-" + id);
+        var input = document.getElementById("input-" + id);
+        var tt = document.getElementById("total-" + id);
+
+        tt.innerText = parseInt(precio.innerText.substr(1)) * parseInt(input.value);
+        var items = document.getElementsByClassName("totalItem");
+        totalNeto = 0
+        for (var i = 0; i < items.length; i++) {
+            totalNeto += parseInt(items[i].innerText);
+        }
+        var totalBruto = document.getElementById("totalBruto");
+        totalBruto.innerText = totalNeto;
+    }
+
+
+    function devuelta() {
+        const totalBruto = document.getElementById("totalBruto");
+        const efectivo = document.getElementById("efectivo");
+        const cambio = document.getElementById("cambio");
+        const total = parseInt(efectivo.value) - parseInt(totalBruto.innerText);    
+        cambio.innerText = total;
+    }
+    function cliente() {
+        const cedula_cliente = document.getElementById("cedula_cliente");
+        const totalBruto = document.getElementById("totalBruto").value;
+        console.log(totalNeto)
+        var puntos = parseInt(totalNeto/2000)
+        console.log(puntos)
+        console.log(cedula_cliente.value)
+        $.ajax({
+            method: "GET",
+            url: `/findUser?cedula=${cedula_cliente.value}`
+        })
+        .done(function(e) {  
+            console.log(e) 
+            $("#puntos").append(`<div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Se abonaran <strong>${puntos}</strong> super esiPuntos a:</label>
+                        <input type="text" onchange="cliente();"  placeholder=${e.firstname} class="form-control" readonly="readonly">
+                    </div>`)
+        })
+    }
+</script>
+
+<div class="modal fade" id="modal-TotalCost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cambio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Efectivo Recibido:</label>
+                        <input type="text" onchange="devuelta()"  class="form-control" id="efectivo">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Cambio a entregar:</label>
+                        <textarea class="form-control" id="cambio"></textarea>
+                    </div>
+                </form>
+                <form  id="puntos">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Tienes esiPuntos?:</label>
+                        <input type="text" onchange="cliente()"  placeholder="Cedula titular esipuntos" class="form-control" id="cedula_cliente">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Pagar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#Efectivo-button").click(function () {
+            $("#modal-TotalCost").modal();
+        });
+    });
+</script> {{!-- cierra modal --}}
