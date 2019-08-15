@@ -1,42 +1,5 @@
-{{#section 'script'}}
-<script type="application/javascript">
 
 
-    alert("Funciono!");
-
-    $(function () {
-        alert("Hello World!");
-    });
-</script> {{/section}}
-
-<script>
-    var total = function (id) {
-        console.log("Prueba-" + id);
-        var precio = document.getElementById("precio-" + id);
-        var input = document.getElementById("input-" + id);
-        var tt = document.getElementById("total-" + id);
-        console.log(precio);
-        console.log(input);
-        console.log(tt);
-        tt.innerText = parseInt(precio.innerText.substr(1)) * parseInt(input.value);
-        var items = document.getElementsByClassName("totalItem");
-        var totalNeto = 0;
-        for (var i = 0; i < items.length; i++) {
-            totalNeto += parseInt(items[i].innerText);
-        }
-        var totalBruto = document.getElementById("totalBruto");
-        totalBruto.innerText = totalNeto;
-    }
-
-    const devuelta = function (id) {
-        const totalBruto = document.getElementById("totalBruto");
-        const efectivo = document.getElementById("efectivo");
-        const cambio = document.getElementById("cambio");
-        const total = parseInt(efectivo.value) - parseInt(totalBruto.innerText);
-        
-        cambio.innerText = total;
-    }
-</script>
 <div class="container-fluid">
     <!-- ============================================================== -->
     <!-- Start Page Content -->
@@ -83,9 +46,10 @@
                     <hr>
                     <small>Precio Total</small>
                     <h2 id="totalBruto">${{{sum productos}}}</h2>
+                    <input type="number" id="totalCompra" value="{{{sum productos}}}" hidden>
                     <hr>
                     <h5>Paga con: </h5>
-                    <button id='Efectivo-button' class="btn btn-primary" type='button' data-toggle="modal" data-target="modal-TotalCost">Efectivo</button>
+                    <button id="Efectivo-button" class="btn btn-primary" type="button" data-toggle="modal" data-target="modal-TotalCost">Efectivo</button>
                     {{!-- <button class="btn btn-secondary btn-outline">Credito</button> --}} {{!-- modal --}}
                     <div class="modal fade" id="modal-TotalCost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -100,7 +64,7 @@
                                     <form>
                                         <div class="form-group">
                                             <label for="recipient-name" class="col-form-label">Efectivo Recibido:</label>
-                                            <input type="text" onchange="devuelta();"  class="form-control" id="efectivo">
+                                            <input type="text" onchange="change(efectivo)" class="form-control" id="efectivo">
                                         </div>
                                         <div class="form-group">
                                             <label for="message-text" class="col-form-label">Cambio a entregar:</label>
@@ -110,7 +74,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary">Aceptar</button>
+                                    <button type="button" class="btn btn-primary">Calcular</button>
                                 </div>
                             </div>
                         </div>
@@ -148,3 +112,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    var total = function (id) {
+        console.log("Prueba-" + id);
+        var precio = document.getElementById("precio-" + id);
+        var input = document.getElementById("input-" + id);
+        var tt = document.getElementById("total-" + id);
+        console.log(precio);
+        console.log(input);
+        console.log(tt);
+        tt.innerText = parseInt(precio.innerText.substr(1)) * parseInt(input.value);
+        var items = document.getElementsByClassName("totalItem");
+        var totalNeto = 0;
+        for (var i = 0; i < items.length; i++) {
+            totalNeto += parseInt(items[i].innerText);
+        }
+        var totalBruto = document.getElementById("totalBruto");
+        totalBruto.innerText = totalNeto;
+    }
+    const change = function (id) {
+        const totalC = document.getElementById("totalCompra");
+        const cambio = document.getElementById("cambio");
+        const efectivo = document.getElementById("efectivo");
+        cambio.value = parseInt(efectivo.value) - parseInt(totalC.value);
+    }
+</script>
