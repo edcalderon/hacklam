@@ -79,6 +79,7 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.esiPuntos = result.esiPuntos;
 			req.session.administrador = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
@@ -100,6 +101,7 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.esiPuntos = result.esiPuntos;
 			req.session.gerente = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
@@ -121,6 +123,7 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.esiPuntos = result.esiPuntos;
 			req.session.bodeguero = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
@@ -142,6 +145,7 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.esiPuntos = result.esiPuntos;
 			req.session.cajero = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
@@ -436,12 +440,24 @@ app.get('/dashboardadmintable', (req, res) => {
 });
 
 app.get('/findUser', (req, res) => {
-	User.findOne({ cc: req.query.cedula }, (err, result) => {
-		if (err) {
-			console.log(err);
-		} 
-		res.json(result);
-	});
+	if(!req.query.updatePoints){
+		User.findOne({ cc: req.query.cedula }, (err, result) => {
+			if (err) {
+				console.log(err);
+			} 
+			res.json(result);
+		});
+	}
+	if(req.query.updatePoints){
+		User.findOneAndUpdate({ cc: req.query.cedula }, { $inc: { esiPuntos: req.query.updatePoints } }, (err, result) => {
+			if (err) {
+				console.log(err);
+			} 
+			res.json(result);
+		});
+	}
+
+
 });
 
 app.post('/dashboardadmin', upload.single('imagenProducto'), (req, res) => {
@@ -586,6 +602,7 @@ app.post('/dashboardprofile', upload.single('userPhoto'), (req, res) => {
 						phone: resultado.phone,
 						cc: resultado.cc,
 						roll: resultado.roll,
+						esiPuntos: resultado.esiPuntos,
 						resultshow: 'Datos actualizados correctamente.',
 					});
 				}

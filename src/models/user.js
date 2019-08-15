@@ -64,6 +64,7 @@ const userSchema = new Schema({
 	},
 	esiPuntos: {
 		type: Number,
+		default: 0
 	}
 });
 

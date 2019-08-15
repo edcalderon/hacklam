@@ -88,7 +88,6 @@
         totalBruto.innerText = totalNeto;
     }
 
-
     function devuelta() {
         const totalBruto = document.getElementById("totalBruto");
         const efectivo = document.getElementById("efectivo");
@@ -99,20 +98,26 @@
     function cliente() {
         const cedula_cliente = document.getElementById("cedula_cliente");
         const totalBruto = document.getElementById("totalBruto").value;
-        console.log(totalNeto)
         var puntos = parseInt(totalNeto/2000)
-        console.log(puntos)
-        console.log(cedula_cliente.value)
         $.ajax({
             method: "GET",
             url: `/findUser?cedula=${cedula_cliente.value}`
         })
         .done(function(e) {  
-            console.log(e) 
             $("#puntos").append(`<div class="form-group">
                         <label for="recipient-name" class="col-form-label">Se abonaran <strong>${puntos}</strong> super esiPuntos a:</label>
                         <input type="text" onchange="cliente();"  placeholder=${e.firstname} class="form-control" readonly="readonly">
                     </div>`)
+            $("#button-pagar").click(function (){
+                $.ajax({
+                    method: "GET",
+                    url: `/findUser?cedula=${cedula_cliente.value}&updatePoints=${puntos}`
+                })
+                .done(function(res) {  
+                    $("#modal-TotalCost").modal('hide');
+                    console.log(res.esiPuntos)
+                })
+            });
         })
     }
 </script>
@@ -146,7 +151,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Pagar</button>
+                <button type="button" id="button-pagar" class="btn btn-primary">Pagar</button>
             </div>
         </div>
     </div>
@@ -155,7 +160,8 @@
 <script>
     $(document).ready(function () {
         $("#Efectivo-button").click(function () {
-            $("#modal-TotalCost").modal();
+            $("#modal-TotalCost").modal('show');
         });
+
     });
 </script> {{!-- cierra modal --}}

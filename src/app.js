@@ -42,6 +42,7 @@ app.use((req, res, next) => {
 		res.locals.email = req.session.email;
 		res.locals.cc = req.session.cc;
 		res.locals.phone = req.session.phone;
+		res.locals.esiPuntos= req.session.esiPuntos;
 		res.locals.listado = req.session.listado;
 		res.locals.courses = req.session.courses;
 		res.locals.miscursos = req.session.miscursos;
