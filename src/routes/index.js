@@ -142,6 +142,7 @@ app.post('/login', (req, res) => {
 			req.session.email = result.email;
 			req.session.cc = result.cc;
 			req.session.phone = result.phone;
+			req.session.cajero = true;
 			if (result.avatar) {
 				req.session.avatar = result.avatar.toString('base64');
 			}
@@ -617,7 +618,7 @@ app.get('/dashboardstoreupdate', (req, res) => {
 
 app.get('/updatestock', (req, res) => {
 	const { nombre, sede, cantidad } = req.query;
-	Product.find({ nombre: nombre }, (err, result) => {
+	Product.find({ nombre }, (err, result) => {
 		if (err) return console.log(err);
 		const test = result[0].cantidad;
 		test[sede] += parseInt(cantidad, 10);
@@ -780,6 +781,7 @@ app.post('/dashboardeditararticulo', upload.single('imagenProducto'), (req, res)
 app.get('/exit', (req, res) => {
 	// localStorage.setItem('token', ' ')
 	res.locals.session = false;
+	res.locals.active = false;
 	req.session.destroy();
 	res.render('indexdashboard', {});
 });

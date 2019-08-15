@@ -87,21 +87,23 @@ hbs.registerHelper('listarUsuarios', (usuarios) => {
 
 hbs.registerHelper('listarProductos', (productos) => {
 	let texto = '';
-	productos.forEach((prod) => {
-		texto += `<tr id="${prod._id}" role="row" class="odd">
-		 <td class="sorting_1">${prod.nombre}</td>
-		 <td>${prod.categoria}</td>
-		 <td>${prod.precio}</td>
-		 <td class="cell100 column4">   
-		   <div class="inblock" >
-			 <button type="button" class="btn btn-outline-primary"><i id="edit" data-id="${prod._id}" class="fa fa-pencil" >Editar&nbsp;&nbsp;</i></button>
-			 <button type="button" class="btn btn-outline-danger"><i id="delete" data-id="${prod._id}" class="fa fa-trash">Eliminar&nbsp;&nbsp;</i></button>
-			 <button type="button" class="btn btn-outline-success"><i id="shop" data-id="${prod.id}" class="fa fa-cart-plus cartshop">Añadir a cesta&nbsp;&nbsp;</i></button>
-			 <input type="checkbox" data-id="${prod._id}" class="check"/> 
-		   </div>
-		 </td>
-		</tr>`;
-	});
+	if (productos) {
+		productos.forEach((prod) => {
+			texto += `<tr id="${prod._id}" role="row" class="odd">
+			 <td class="sorting_1">${prod.nombre}</td>
+			 <td>${prod.categoria}</td>
+			 <td>${prod.precio}</td>
+			 <td class="cell100 column4">   
+				 <div class="inblock" >
+				 <i id="edit" data-id="${prod._id}" class="fa fa-pencil" ></i>
+				 <i id="delete" data-id="${prod._id}" class="fa fa-trash"></i>
+				 <i id="shop" data-id="${prod.id}" class="fa fa-cart-plus cartshop"></i>
+				 <input type="checkbox" data-id="${prod._id}" class="check"/> 
+				 </div>
+			 </td>
+			</tr>`;
+		});
+	}
 	return texto;
 });
 
