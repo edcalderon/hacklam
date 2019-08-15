@@ -395,9 +395,6 @@ app.get('/checkout', (req, res) => {
 		checkout: true,
 		productos: req.session.shopingcart,
 		cant: 1,
-		helpers: {
-			foo: function (d) { return 'foo.' + d; }
-		}
 	});
 });
 
