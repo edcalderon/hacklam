@@ -316,10 +316,7 @@ app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 		if (err) {
 			return console.log(err);
 		}
-		if (result.nombre === nombre) {
-			console.log('Producto repetido...');
-			res.render('dashboardupdateproductwrong', product);
-		} else {
+		if (result === null) {
 			product.save((err, producto) => {
 				if (err) {
 					console.log(err);
@@ -336,6 +333,9 @@ app.post('/createproduct', upload.single('imagenProducto'), (req, res) => {
 					});
 				}
 			});
+		} else {
+			console.log('Producto repetido...');
+			res.render('dashboardupdateproductwrong', product);
 		}
 	});
 
@@ -629,7 +629,12 @@ app.get('/updatestock', (req, res) => {
 	Product.find({ nombre }, (err, result) => {
 		if (err) return console.log(err);
 		const test = result[0].cantidad;
-		test[sede] += parseInt(cantidad, 10);
+		let cant = parseInt(cantidad, 10);
+		if (test[sede] + cant >= 0) {
+			test[sede] += cant;
+		} else {
+			test[sede] = 0;
+		}
 		Product.updateOne({ nombre }, { $set: { cantidad: test } }, (error, result) => {
 			if (error) return console.log(err);
 			const { sede, roll } = req.session;
