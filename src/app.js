@@ -2,14 +2,14 @@
 const { PORT } = require('./config/config');
 const { URLDB } = require('./config/config');
 const express = require('express');
-
-const app = express();
-const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const server = require('http').createServer(app);
+const path = require('path');
 const { LocalStorage } = require('node-localstorage');
+
+const app = express();
+const server = require('http').createServer(app);
 
 let localStorage;
 // Local localstorage
@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 		res.locals.email = req.session.email;
 		res.locals.cc = req.session.cc;
 		res.locals.phone = req.session.phone;
-		res.locals.esiPuntos= req.session.esiPuntos;
+		res.locals.esiPuntos = req.session.esiPuntos;
 		res.locals.listado = req.session.listado;
 		res.locals.courses = req.session.courses;
 		res.locals.miscursos = req.session.miscursos;
@@ -89,7 +89,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 app.use(require('./routes/index'));
-// app.use(multer({dest:'./../routes/index'}).any());
 
 // mongoose Conection
 mongoose.connect(URLDB, { useNewUrlParser: true }, (err) => {

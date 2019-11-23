@@ -257,6 +257,7 @@ app.get('/register', (req, res) => {
 
 
 app.post('/register', (req, res) => {
+	console.log('enter')
 	const user = new User({
 		firstname: req.body.firstName,
 		lastname: req.body.lastName,
@@ -268,7 +269,9 @@ app.post('/register', (req, res) => {
 		roll: req.body.roll,
 		sede: req.body.sede,
 	});
+	console.log(user);
 	user.save((err) => {
+		console.log('enter-save')
 		if (err) {
 			console.log(err);
 			res.render('register', {
